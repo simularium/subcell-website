@@ -1,0 +1,20 @@
+body {
+    font-family: Overpass;
+    font-size: 12px;
+    font-weight: 400;
+    color: #d3d3d3;
+    background-color: #1e1b25;
+}
+
+h1 {
+    margin-left: 15;
+    margin-top: 50;
+    margin-bottom: 50;
+    font-size: 50px;
+    font-weight: 200;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: 400;
+}
