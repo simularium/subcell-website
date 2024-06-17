@@ -1,2 +1,2 @@
 # subcell-website
-Website for subcellar models
+Website for subcellular models
