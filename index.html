@@ -6,22 +6,23 @@
     </head>
     <div id="content">
 
-        <h1>Simulating Actin Compression</h1>
-        <h2>
-            Comparing simulators of actin filament bending and twisting reveals tradeoff 
-            between computational cost and capturing detailed behaviors.
-        </h2>
-
-        <div class="elastic-container">
-            <div class="responsive-iframe">
-                <div class="iframe">
-                    <img class="placeholder-img" src="http://placehold.it/16x9"/>
-                    <iframe
-                    src="https://simularium.allencell.org/embed?trajUrl=https://readdy-working-bucket.s3.us-west-2.amazonaws.com/outputs/actin_compression_cytosim_readdy.simularium" 
-                    frameborder="0" allowfullscreen></iframe>
+        <div>
+            <h1>Simulating Actin Compression</h1>
+            <h2>
+                Comparing simulators of actin filament bending and twisting reveals tradeoff 
+                between computational cost and capturing detailed behaviors.
+            </h2>
+            <div class="elastic-container">
+                <div class="responsive-iframe">
+                    <div class="iframe">
+                        <div class="placeholder-16-9"></div>
+                        <iframe
+                        src="https://simularium.allencell.org/embed?trajUrl=https://readdy-working-bucket.s3.us-west-2.amazonaws.com/outputs/actin_compression_cytosim_readdy.simularium" 
+                        frameborder="0" allowfullscreen></iframe>
+                    </div>
                 </div>
+                <div class="caption">Simularium visualization of filaments simulated in ReaDDy and Cytosim.</div>
             </div>
-            <div class="caption">Simularium visualization of filaments simulated in ReaDDy and Cytosim.</div>
         </div>
 
         <div class="chunk">
@@ -93,17 +94,16 @@
             <div class="elastic-container">
                 <div id="traj-compare">
                     <div class="responsive-iframe">
-                        <div class="iframe">
-                            <img class="placeholder-img" src="http://placehold.it/16x9"/>
+                        <div class="traj-compare-iframe iframe">
+                            <div class="placeholder-traj-compare1"></div>
                             <iframe
                             src="https://simularium.github.io/trajectory-compare/matrix/actin_compression.html" 
-                            frameborder="0" allowfullscreen></iframe>
+                            scrolling="no" frameborder="0" allowfullscreen></iframe>
                         </div>
                     </div>
                 </div>
-                <div class="caption">Comparison matrix for simulated trajectories.</div>
             </div>
-            <div class="xlarge-placeholder"></div>
+            <div class="placeholder-traj-compare2"></div>
             <br class="clear" />
         </div>
 
@@ -144,6 +144,14 @@
                 Notably, the monomer-scale simulations captured
                 an out-of-plane filament twist, characteristic of a helical structure, more effectively than the fiber-scale simulations.
             </h2>
+            <div class="elastic-container">
+                <div class="responsive-iframe">
+                    <div class="iframe">
+                        <div class="placeholder-16-9"></div>
+                    </div>
+                </div>
+                <div class="caption">Simularium visualization of inverse PCA transforms of filaments.</div>
+            </div>
             <div class="float-left copy">
                 <p>
                     Inverse PCA transforms of the filament shapes confirmed that PC1 captured filament compression and peak asymmetry,

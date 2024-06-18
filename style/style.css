@@ -72,11 +72,6 @@ h2 {
     position: relative;
 }
 
-.iframe .placeholder-img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
 .iframe iframe {
     position: absolute;
     top: 0;
@@ -95,24 +90,27 @@ h2 {
     margin-top: 10px;
 }
 
-/* TODO */
 .placeholder-16-9 {
     aspect-ratio: 16 / 9;
     background-color: #666;
+}
+
+.placeholder-traj-compare1 {
+    height: 1000px;
+    background-color: red;
+}
+
+.placeholder-traj-compare2 {
+    height: 920px;
+    background-color: blue;
 }
 
 #traj-compare {
     position: absolute;
     left: 0px;
     width: 100vw;
-    height: 600px;
+    height: 920px;
     background-color: #666;
-}
-
-.xlarge-placeholder {
-    position: relative;
-    top: -46px;
-    height: 600px;
 }
 
 .clear {
