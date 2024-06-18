@@ -1,15 +1,15 @@
 body {
     font-family: Overpass;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 400;
     color: #d3d3d3;
-    background-color: #1e1b25;
+    background-color: #777;
+    text-align: center;
 }
 
 h1 {
-    margin-left: 15;
-    margin-top: 50;
-    margin-bottom: 50;
+    margin-top: 50px;
+    margin-bottom: 0px;
     font-size: 50px;
     font-weight: 200;
 }
@@ -17,4 +17,163 @@ h1 {
 h2 {
     font-size: 20px;
     font-weight: 400;
+}
+
+#content {
+    width: 80%;
+    max-width: 854px;
+    margin: auto;
+    background-color: #1e1b25;
+    display: block;
+    padding: 20px;
+    text-align: left;
+}
+
+.center-container {
+    clear: both;
+    float: none;
+    text-align: center;
+}
+
+.center {
+    margin: 0 auto;
+    max-width: 750px;
+}
+
+.image-group {
+    display: inline-block;
+}
+
+.min-width {
+    width: 360px;
+}
+
+.chunk {
+    margin-top: 350px;
+    margin-bottom: 50px;
+}
+
+.large-embed {
+    text-align: left;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    min-width: 360px;
+}
+
+.small-wide {
+    width: 360px;
+    display: inline-block;
+}
+
+.caption {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+#sim-all {
+    aspect-ratio: 16 / 9;
+    background-color: #666;
+}
+
+#sim-ex-readdy {
+    aspect-ratio: 16 / 9;
+    background-color: #666;
+}
+
+#sim-ex-cytosim {
+    aspect-ratio: 16 / 9;
+    background-color: #666;
+}
+
+#traj-compare {
+    position: absolute;
+    left: 0px;
+    width: 100vw;
+    height: 600px;
+    background-color: #666;
+}
+
+.xlarge-placeholder {
+    position: relative;
+    top: -46px;
+    height: 600px;
+}
+
+.clear {
+    clear: both;
+}
+
+.left-copy {
+    float: left;
+    margin-right: 40px;
+}
+
+.copy {
+    max-width: 360px;
+    text-align: left;
+}
+
+.figure-panel {
+    overflow: hidden;
+}
+
+#a {
+    float: left;
+    width: 360px;
+    height: 280px;
+    margin: 15px 40px 0px 0px;
+}
+
+#a img {
+    width: 1310px;
+    height: 1328px;
+    margin: -100px 0px 0px 0px;
+}
+
+#b {
+    width: 360px;
+    height: 163px;
+    margin: 15px 0px 30px 0px;
+}
+
+#b img {
+    width: 983px;
+    height: 996px;
+    margin: 0px 0px 0px -260px;
+}
+
+#f1 {
+    width: 360px;
+    height: 365px;
+    margin: 15px 0px 30px 0px;
+}
+
+#f1 img {
+    width: 983px;
+    height: 996px;
+    margin: -630px 0px 0px 0px;
+}
+
+#f2 {
+    width: 360px;
+    height: 365px;
+    margin: 15px 0px 30px 0px;
+}
+
+#f2 img {
+    width: 983px;
+    height: 996px;
+    margin: -630px 0px 0px -353px;
+}
+
+#g {
+    width: 360px;
+    height: 365px;
+    margin: 15px 0px 30px 0px;
+}
+
+#g img {
+    width: 983px;
+    height: 996px;
+    margin: -630px 0px 0px -653px;
 }
