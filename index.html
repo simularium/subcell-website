@@ -9,19 +9,33 @@
         <div>
             <h1>Simulating Actin Compression</h1>
             <h2>
-                Comparing simulators of actin filament bending and twisting reveals tradeoff 
-                between computational cost and capturing detailed behaviors.
+                Comparing simulations of actin filament bending and twisting reveals tradeoff between 
+                computational cost and capturing detailed behaviors.
             </h2>
+            <p class="todo">
+                [TODO: add authors]
+            </p>
+            <p class="todo">
+                [TODO: prevent popup messages, start at last time point, remove filename title, color filaments orange and teal, better initial camera view]
+            </p>
             <div class="elastic-container">
                 <div class="responsive-iframe">
                     <div class="iframe">
                         <div class="placeholder-16-9"></div>
                         <iframe
-                        src="https://simularium.allencell.org/embed?trajUrl=https://readdy-working-bucket.s3.us-west-2.amazonaws.com/outputs/actin_compression_cytosim_readdy.simularium" 
+                        src="https://simularium.allencell.org/embed?trajUrl=https://readdy-working-bucket.s3.us-west-2.amazonaws.com/outputs/actin_compression_cytosim_readdy.simularium&t=4" 
                         frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
-                <div class="caption">Simularium visualization of filaments simulated in ReaDDy and Cytosim.</div>
+                <div class="caption">
+                    3D Visualization of compressed actin filaments simulated in ReaDDy<sup><a href="#ref1">1</a></sup> 
+                    and Cytosim<sup><a href="#ref2">2</a></sup>. 
+                    Filaments are aligned at the final time step of the simulation.
+                    <span class="orange">ReaDDy filaments</span> show notable directional biphasic out-of-plane behavior, 
+                    indicative of filament twist only captured with monomer-scale resolution. 
+                    <span class="teal">Cytosim filaments</span> showed very little out-of-plane behavior, 
+                    and when they did, it was just as likely to be in either direction.
+                </div>
             </div>
         </div>
 
@@ -34,6 +48,14 @@
                     Fundamental cellular processes such as endocytosis, cell motility, and cytokinesis are reliant on a cell's ability 
                     to produce force. The actin cytoskeleton plays a central role in force production in these processes.
                 </p>
+                <p>
+                    The helical structure of actin filaments results in the coupling of filament twisting and bending, 
+                    which impacts the structure of the actin network in 3D space.
+                    This has implications for actin's function in force production and maintainance of subcellular structures.
+                </p>
+                <p class="todo">
+                    [TODO: more images and videos?]
+                </p>
             </div>
             <div id="a" class="figure-panel">
                 <img src="img/actin_comparison_figure-1.jpg" />
@@ -43,7 +65,7 @@
 
         <div class="chunk">
             <h2>
-                We developed two models of actin to compare dynamics at different spatiotemporal scales.
+                We developed two models of actin to compare twisting and bending at different spatiotemporal scales.
             </h2>
             <div class="center-container">
                 <div class="center min-width">
@@ -53,43 +75,55 @@
                 </div>
             </div>
             <div class="center-container">
+                <div class="center copy">
+                    <p>
+                        Many different simulation methods have been developed to model actin. 
+                        Each simulation method has limitations depending on the spatial scale.
+                    </p>
+                </div>
+            </div>
+            <div class="center-container">
                 <div class="center">
                     <div class="tile-sideways">
                         <iframe width="360" height="203"
                         src="https://simularium.allencell.org/embed?trajUrl=https://readdy-working-bucket.s3.us-west-2.amazonaws.com/outputs/actin_compression_velocity=4.7_0.h5.simularium" 
                         frameborder="0" allowfullscreen></iframe>
-                        <div class="caption">Actin filaments in ReaDDy.</div>
+                        <div class="caption">
+                            ReaDDy Actin filaments are composed of particles, one for each actin monomer, 
+                            which are held together by potentials.
+                        </div>
                     </div>
                     <div class="tile-sideways">
                         <iframe width="360" height="203"
                         src="https://simularium.allencell.org/embed?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium" 
                         frameborder="0" allowfullscreen></iframe>
-                        <div class="caption">Actin filaments in Cytosim.</div>
+                        <div class="caption">
+                            Cytosim actin filaments are represented by control points that define a mathematical line,
+                            which is acted upon by physical forces.
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="center-container">
-                <div class="center copy">
-                    <p>
-                        There have been many independent efforts to model these properties using different spatial simulation methods that emphasize 
-                        different spatiotemporal scales. However, each simulation method has limitations due to its particular implementation and 
-                        assumptions characteristic of the simulated length scale.
+                    <p class="todo">
+                        [TODO: prevent popup messages, remove filename title, remove camera buttons, better initial camera view]
+                    </p>
+                    <p class="todo">
+                        [TODO: add a few more details about methods including links to repos]
                     </p>
                 </div>
             </div>
             <br class="clear" />
         </div>
 
-        <div class="chunk">
+        <div class="chunk"> 
             <h2>
-                We then simulated the compression of these filaments to 350 nm across a range of velocities. 
+                We simulated the compression of these filaments to 350 nm across a range of velocities. 
             </h2>
-            <div class="copy">
-                <p>
-                    We sought to determine the regimes in which each simulator captured the 3D mechanics of compressing actin
-                    filaments. To do this, we simulated the compression of an actin filament at five compression velocities, spanning the
-                    range of velocities that were computationally feasible and physiologically relevant.
-                </p>
+            <div>
+                We wanted to know how each simulator captured structural properties of actin in different situations. 
+                We simulated compression at five velocities, 
+                spanning the range of velocities that were computationally feasible and physiologically relevant.
+            </div>
+            <div class="instructions">
+                Use the matrix to explore results from different simulators at different compression velocities.
             </div>
             <div class="elastic-container">
                 <div id="traj-compare">
@@ -107,11 +141,22 @@
             <br class="clear" />
         </div>
 
-        <div class="chunk">
+        <div>
             <h2>
-                Our quantitative comparisons and principal component analysis revealed a divergence between the monomer-scale and
-                fiber-scale simulations, particularly in terms of non-coplanarity. 
+                Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity. 
             </h2>
+            <div class="center-container">
+                <div class="center">
+                    <div id="e" class="figure-panel">
+                        <img src="img/actin_comparison_figure-1.jpg" />
+                    </div>
+                </div>
+            </div>
+            <div>
+                ReaDDy actin filaments showed high non-coplanarity in one direction, especially in filaments simulated at higher compression velocities. 
+                Cytosim filaments showed very little out-of-plane behavior at any
+                compression velocities, and when they did, it was just as likely to be in either direction.
+            </div>
             <div class="center-container">
                 <div class="center">
                     <div class="tile-sideways">
@@ -126,39 +171,35 @@
                     </div>
                 </div>
             </div>
-            <div class="center-container">
-                <div class="center copy">
-                    <p>
-                        These simulations showed systematic differences in the shapes of these bending and twisting filaments. The filaments 
-                        simulated using ReaDDy had notable directional biphasic out-of-plane behavior, indicative of filament twist
-                        only captured with monomer-scale resolution. This out-of-plane helical behavior was also more evident in filaments
-                        simulated at higher compression velocities. The Cytosim simulations showed very little out-of-plane behavior at any
-                        compression velocities, and when they did, it was just as likely to be in either direction.
-                    </p>
-                </div>
+            <div class="instructions">
+                Explore examples of trajectories with different final time points.
             </div>
+            <p class="todo">
+                [TODO: link to some example trajectories]
+            </p>
         </div>
 
         <div class="chunk">
             <h2>
-                Notably, the monomer-scale simulations captured
-                an out-of-plane filament twist, characteristic of a helical structure, more effectively than the fiber-scale simulations.
-            </h2>
+                Monomer-scale simulations captured characteristics of helical structure more effectively than fiber-scale simulations.
+            </h2>   
+            <p class="todo">
+                [TODO: simularium visualization of inverse PCA filaments]
+            </p>
             <div class="elastic-container">
                 <div class="responsive-iframe">
                     <div class="iframe">
                         <div class="placeholder-16-9"></div>
                     </div>
                 </div>
-                <div class="caption">Simularium visualization of inverse PCA transforms of filaments.</div>
+                <div class="caption">3D visualization of inverse PCA transforms of filaments.</div>
             </div>
             <div class="float-left copy">
                 <p>
                     Inverse PCA transforms of the filament shapes confirmed that PC1 captured filament compression and peak asymmetry,
                     while PC2 scaled with filament non-coplanarity and twist. Inverse transforms also revealed that low values
                     of PC2 correspond to twist in the opposite direction. Some Cytosim simulations show this behavior, likely because
-                    directional helicity is not enforced in Cytosim. Overall, we conclude that compressing filaments simulated at monomer
-                    resolution capture directional out-of-plane helicity more than filaments simulated at the fiber scale.
+                    directional helicity is not enforced in Cytosim.
                 </p>
             </div>
             <div id="g" class="figure-panel">
@@ -169,9 +210,27 @@
 
         <div class="chunk">
             <h2>
-                This comparison, enhanced by broadly shareable interactive 3D visualizations, enables researchers to make informed
-                choices when designing multi-scale models of biological systems.
+                This comparison enables researchers to make informed choices when designing multi-scale models of biological systems.
             </h2>
+            <p class="todo">
+                [TODO: describe and link to vivarium wrappers]
+            </p>
+        </div>
+
+        <div class="chunk">
+            <h2>References</h2>
+            <ol>
+                <li><a id="ref1">
+                    Hoffmann, M., Fröhner, C. & Noé, F. ReaDDy 2: Fast and flexible software framework for
+                    interacting-particle reaction dynamics. PLOS Computational Biology 15, e1006830 (2019).
+                </a></li>
+                <li><a id="ref2">
+                    Nedelec, F. & Foethke, D. Collective Langevin dynamics of flexible cytoskeletal fibers. New J. Phys. 9, 427-427 (2007).
+                </a></li>
+            </ol>
+            <p class="todo">
+                [TODO: more references]
+            </p>
         </div>
 
     </div>
