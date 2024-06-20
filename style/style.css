@@ -35,7 +35,7 @@ h2 {
 }
 
 #toc {
-    background-color: white;
+    background-color: #ffffff;
 }
 
 #toc .center {
@@ -46,7 +46,7 @@ h2 {
     width: 100%;
 }
 
-button {
+.back_btn {
     background-color: #1e1b25;
     border: 1px solid #d092ff;
     border-radius: 10px;
