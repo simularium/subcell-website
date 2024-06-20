@@ -34,6 +34,36 @@ h2 {
     text-align: left;
 }
 
+#toc {
+    background-color: white;
+}
+
+#toc .center {
+    padding: 20px;
+}
+
+.max-width {
+    width: 100%;
+}
+
+button {
+    background-color: #1e1b25;
+    border: 1px solid #d092ff;
+    border-radius: 10px;
+    color: #d092ff;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 0px;
+    cursor: pointer;
+}
+
+.toc-caption {
+    font-size: 14px;
+    margin: 10px;
+}
+
 .center-container {
     clear: both;
     float: none;
@@ -136,6 +166,10 @@ sup a {
     width: 100vw;
     height: 1040px;
     background-color: #666;
+}
+
+li {
+    margin-bottom: 10px;
 }
 
 .clear {

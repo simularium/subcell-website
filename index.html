@@ -13,7 +13,7 @@
                 computational cost and capturing detailed behaviors.
             </h2>
             <p class="todo">
-                [TODO: add authors]
+                [TODO: add authors and link to paper]
             </p>
             <p class="todo">
                 [TODO: prevent popup messages, start at last time point, remove filename title, color filaments orange and teal, better initial camera view]
@@ -28,8 +28,8 @@
                     </div>
                 </div>
                 <div class="caption">
-                    3D Visualization of compressed actin filaments simulated in ReaDDy<sup><a href="#ref1">1</a></sup> 
-                    and Cytosim<sup><a href="#ref2">2</a></sup>. 
+                    3D Visualization of compressed actin filaments simulated in ReaDDy<sup><a href="#references">1</a></sup> 
+                    and Cytosim<sup><a href="#references">2</a></sup>. 
                     Filaments are aligned at the final time step of the simulation.
                     <span class="orange">ReaDDy filaments</span> show notable directional biphasic out-of-plane behavior, 
                     indicative of filament twist only captured with monomer-scale resolution. 
@@ -40,6 +40,56 @@
         </div>
 
         <div class="chunk">
+            <a id="figure"></a>
+            <h2>
+                Monomer-resolution simulations of compressing actin filaments capture out-of-plane filament twist more than fiber-scale simulations.
+            </h2>
+            <p class="instructions">
+                Select a hotspot or scroll to explore.
+            </p>
+            <div id ="toc" class="center-container">
+                <div class="center">
+                    <div style="position: relative;">
+                        <img src="img/actin_comparison_figure-1.jpg" style="width: 100%; height: auto;">
+                        <a href="#background" alt="Actin twist/bend in the cell">
+                            <div style="position: absolute; left: 0%; top: 0%; width: 25.6%; height: 28%; background-color: rgba(208, 146, 255, 0.25);"></div>
+                        </a>
+                        <a href="#models" alt="Two actin models">
+                            <div style="position: absolute; left: 26.5%; top: 0%; width: 36.6%; height: 28%; background-color: rgba(251, 217, 149, 0.25);"></div>
+                        </a>
+                        <a href="#matrix" alt="Table of results for each condition">
+                            <div style="position: absolute; left: 64%; top: 0%; width: 36%; height: 28%; background-color: rgba(208, 146, 255, .25);"></div>
+                        </a>
+                        <a href="#analysis" alt="Quantitative analysis">
+                            <div style="position: absolute; left: 0%; top: 62.8%; width: 66.1%; height: 36.3%; background-color: rgba(208, 146, 255, .25);"></div>
+                        </a>
+                        <a href="#inverse_pca" alt="Filament shape variance from PCA">
+                            <div style="position: absolute; left: 67%; top: 62.8%; width: 33%; height: 36.3%; background-color: rgba(251, 217, 149, .25);"></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="toc-caption">
+                (<b>A</b>) Diagram illustrating the role of actin filament bending and twisting in endocytosis. 
+                (<b>B</b>)  (<i>Top</i>) Diagram of actin filaments modeled at monomer-scale, in which the interactions of each monomer
+                of the filament with its neighbors is explicitly simulated, and fiber-scale, in which the filament is modeled as a series
+                of points connected by simple length and angle-limited springs that have no rotational constraints. (<i>Bottom</i>) Snapshots
+                of actin filament simulations compressed to 70% of initial end-to-end distance visualized in Simularium. Each filament has a 
+                contour length of 500 nm. 
+                (<b>C</b>) Traces of filament shape compressed to 70% of initial end-to-end distance. ReaDDy filament shape calculated from 
+                monomer positions. The top left, top right, and bottom right views are projections on the Y-Z plane, Y-X plane, and Z-X plane, 
+                respectively. 
+                Plots of (<b>D</b>) peak asymmetry and (<b>E</b>) non-coplanarity over normalized compression time for each simulator, velocity, 
+                and replicate. 
+                (<b>F</b>) (<i>Left</i>) Trajectories of filaments in PC space for each simulator, velocity, and replicate. The start or end of 
+                each trajectory is marked by a diamond or circle, respectively. (<i>Right</i>) Scatter plots of filaments projected into PC space, 
+                colored by features. 
+                (<b>G</b>) Latent walks for filament shape along PC 1 (<i>Top</i>) and PC 2 (<i>Bottom</i>).
+            </div>
+        </div>
+
+        <div class="chunk">
+            <a id="background"></a>
             <h2>
                 The dynamic bending and twisting of actin filaments mechanically drive many processes in cells.
             </h2>
@@ -60,10 +110,16 @@
             <div id="a" class="figure-panel">
                 <img src="img/actin_comparison_figure-1.jpg" />
             </div>
+            <div class="center-container">
+                <div class="center">
+                    <a href="#figure"><button type="button">Back to Figure</button></a>
+                </div>
+            </div>
             <br class="clear" />
         </div>
 
         <div class="chunk">
+            <a id="models"></a>
             <h2>
                 We developed two models of actin to compare twisting and bending at different spatiotemporal scales.
             </h2>
@@ -110,10 +166,16 @@
                     </p>
                 </div>
             </div>
+            <div class="center-container">
+                <div class="center">
+                    <a href="#figure"><button type="button">Back to Figure</button></a>
+                </div>
+            </div>
             <br class="clear" />
         </div>
 
         <div class="chunk"> 
+            <a id="matrix"></a>
             <h2>
                 We simulated the compression of these filaments to 350 nm across a range of velocities. 
             </h2>
@@ -122,9 +184,14 @@
                 We simulated compression at five velocities, 
                 spanning the range of velocities that were computationally feasible and physiologically relevant.
             </div>
+            <br/>
+            <div style="float: right; margin: 15px 15px 0 50px;">
+                <a href="#figure"><button type="button">Back to Figure</button></a>
+            </div>
             <div class="instructions">
                 Use the matrix to explore results from different simulators at different compression velocities.
             </div>
+            <br class="clear" />
             <div class="elastic-container">
                 <div id="traj-compare">
                     <div class="responsive-iframe">
@@ -142,16 +209,10 @@
         </div>
 
         <div>
+            <a id="analysis"></a>
             <h2>
                 Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity. 
             </h2>
-            <div class="center-container">
-                <div class="center">
-                    <div id="e" class="figure-panel">
-                        <img src="img/actin_comparison_figure-1.jpg" />
-                    </div>
-                </div>
-            </div>
             <div>
                 ReaDDy actin filaments showed high non-coplanarity in one direction, especially in filaments simulated at higher compression velocities. 
                 Cytosim filaments showed very little out-of-plane behavior at any
@@ -177,9 +238,16 @@
             <p class="todo">
                 [TODO: link to some example trajectories]
             </p>
+            <div class="center-container">
+                <div class="center">
+                    <a href="#figure"><button type="button">Back to Figure</button></a>
+                </div>
+            </div>
+            <br class="clear" />
         </div>
 
         <div class="chunk">
+            <a id="inverse_pca"></a>
             <h2>
                 Monomer-scale simulations captured characteristics of helical structure more effectively than fiber-scale simulations.
             </h2>   
@@ -205,28 +273,41 @@
             <div id="g" class="figure-panel">
                 <img src="img/actin_comparison_figure-1.jpg" />
             </div>
+            <div class="center-container">
+                <div class="center">
+                    <a href="#figure"><button type="button">Back to Figure</button></a>
+                </div>
+            </div>
             <br class="clear" />
         </div>
 
         <div class="chunk">
+            <a id="conclusion"></a>
             <h2>
                 This comparison enables researchers to make informed choices when designing multi-scale models of biological systems.
             </h2>
             <p class="todo">
                 [TODO: describe and link to vivarium wrappers]
             </p>
+            <div class="center-container">
+                <div class="center">
+                    <a href="#figure"><button type="button">Back to Figure</button></a>
+                </div>
+            </div>
+            <br class="clear" />
         </div>
 
         <div class="chunk">
+            <a id="references"></a>
             <h2>References</h2>
             <ol>
-                <li><a id="ref1">
+                <li>
                     Hoffmann, M., Fröhner, C. & Noé, F. ReaDDy 2: Fast and flexible software framework for
                     interacting-particle reaction dynamics. PLOS Computational Biology 15, e1006830 (2019).
-                </a></li>
-                <li><a id="ref2">
+                </li>
+                <li>
                     Nedelec, F. & Foethke, D. Collective Langevin dynamics of flexible cytoskeletal fibers. New J. Phys. 9, 427-427 (2007).
-                </a></li>
+                </li>
             </ol>
             <p class="todo">
                 [TODO: more references]
