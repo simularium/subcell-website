@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    <script type="text/javascript" src="scripts/scrolly.js"></script>
+    <script type="text/javascript" src="scripts/figures.js"></script>
+    <script type="text/javascript" src="scripts/utilities.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@200;400;600&display=swap">
+    <style>
+        body {
+            font-family: Overpass;
+            font-size: 16px;
+            color: #d3d3d3;
+            background-color: #1e1b25;
+            margin: 0;
+            padding: 0;
+        }
+
+        main {
+            max-width: 854px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-top: 50px;
+            margin-bottom: 0px;
+            font-size: 50px;
+            font-weight: 200;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 400;
+        }
+
+        h3 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 12px;
+            font-weight: 100;
+        }
+
+        th, td {
+            font-size: 12px;
+        }
+
+        .instructions {
+            color: #d092ff;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+
+        .todo {
+            color: #FF00FF;
+            font-size: 12px;
+        }
+
+        #content {
+            position: relative;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            padding: 1rem;
+        }
+
+        #content>* {
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+        }
+
+        #left {
+            position: relative;
+            padding-right: 2rem;
+            max-width: 300px;
+        }
+
+        #right {
+            position: sticky;
+            z-index: 0;
+        }
+
+        .step {
+            color: #47444D;
+            min-height: 500px;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step.is-active {
+            color: #fff;
+        }
+
+        .stick {
+            position: absolute;
+            visibility: hidden;
+            padding: 0;
+        }
+
+        .stick.is-active {
+            visibility: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section id="header">
+            <h1>Simulating Actin Compression</h1>
+            <h2>
+                Comparing simulations of actin filament bending and twisting reveals tradeoff between
+                computational cost and capturing detailed behaviors
+            </h2>
+        </section>
+
+        <section id="content">
+            <div id="left">
+                <div class="step">
+                    <h3>
+                        The dynamic bending and twisting of actin filaments mechanically drive many processes in cells.
+                    </h3>
+                    <p>
+                        Fundamental cellular processes such as endocytosis, cell motility, and cytokinesis are reliant on a cell's ability
+                        to produce force. The actin cytoskeleton plays a central role in force production in these processes.
+                    </p>
+                    <p>
+                        The helical structure of actin filaments results in the coupling of filament twisting and bending,
+                        which impacts the structure of the actin network in 3D space.
+                        This has implications for actin's function in force production and maintainance of subcellular structures.
+                    </p>
+                    <p class="todo">
+                        [TODO: more images and videos?]
+                    </p>
+                </div>
+                <div class="step">
+                    <h3>
+                        We developed two models of actin to compare twisting and bending at different spatiotemporal scales.
+                    </h3>
+                    <p>
+                        Many different simulation methods have been developed to model actin.
+                        Each simulation method has limitations depending on the spatial scale.
+                    </p>
+                    <p>
+                        ReaDDy Actin filaments are composed of particles, one for each actin monomer, which are held together by potentials.
+                    </p>
+                    <p>
+                        Cytosim actin filaments are represented by control points that define a mathematical line, which is acted upon by physical forces.
+                    </p>
+                </div>
+                <div class="step">
+                    <h3>
+                        We simulated the compression of these filaments to 350 nm across a range of velocities.
+                    </h3>
+                    <p>
+                        We wanted to know how each simulator captured structural properties of actin in different situations.
+                        We simulated compression at five velocities, spanning the range of velocities that were computationally feasible and physiologically relevant.
+                    </p>
+                    <p class="instructions">
+                        Use the matrix to explore results from different simulators at different compression velocities.
+                    </p>
+                </div>
+                <div class="step">
+                    <h3>
+                        Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity.
+                    </h3>
+                    <p>
+                        ReaDDy actin filaments showed high non-coplanarity in one direction, especially in filaments simulated at higher compression velocities.
+                        Cytosim filaments showed very little out-of-plane behavior at any compression velocities, and when they did, it was just as likely to be in either direction.
+                    </p>
+                    <p class="instructions">
+                        Explore examples of trajectories with different final time points.
+                    </p>
+                </div>
+                <div class="step">
+                    <h3>
+                        Monomer-scale simulations captured characteristics of helical structure more effectively than fiber-scale simulations.
+                    </h3>
+                    <p>
+                        Inverse PCA transforms of the filament shapes confirmed that PC1 captured filament compression and peak asymmetry, while PC2 scaled with filament non-coplanarity and twist. Inverse transforms also revealed that low values of PC2 correspond to twist in the opposite direction. Some Cytosim simulations show this behavior, likely because directional helicity is not enforced in Cytosim.
+                    </p>
+                    <p class="instructions">
+                        Explore examples of trajectories with different final time points.
+                    </p>
+                </div>
+            </div>
+            <div id="right">
+                <div class="stick">
+                    <p>
+                        Diagram illustrating the role of actin filament bending and twisting in endocytosis.
+                    </p>
+                </div>
+                <div class="stick">
+                    <p>
+                        Diagram of actin filaments modeled at monomer-scale, in which the interactions of each monomer of the filament with its neighbors is explicitly simulated, and fiber-scale, in which the filament is modeled as a series of points connected by simple length and angle-limited springs that have no rotational constraints.
+                    </p>
+                </div>
+                <div class="stick">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th></th>
+                                <th>Velocity = 0</th>
+                                <th>Velocity = 4.7</th>
+                                <th>Velocity = 15</th>
+                                <th>Velocity = 47</th>
+                                <th>Velocity = 150</th>
+                            </tr>
+                            <tr>
+                                <th>Simulator = ReaDDy</th>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                            </tr>
+                            <tr>
+                                <th>Simulator = Cytosim</th>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                                <td>(snapshot + link to trajectory)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="stick">
+                    <div id="pca_trajectories"></div>
+                    <p>
+                        Trajectories of filaments in PC space for each simulator, velocity, and replicate. The start or end of each trajectory is marked by a diamond or circle, respectively.
+                    </p>
+                    <script>generate_pca_trajectories()</script>
+                </div>
+                <div class="stick">
+                    <div id="component">
+                        <strong>Principal component</strong>
+                        <label class="inputs"><input type="radio" name="component" id="component_1" checked onclick="generate_pca_transform()">PC1</label>
+                        <label class="inputs"><input type="radio" name="component" id="component_2" onclick="generate_pca_transform()">PC2</label>
+                    </div>
+                    <div id="projection">
+                        <strong>Projection</strong>
+                        <label class="inputs"><input type="radio" name="projection" id="projection_X_Y" checked onclick="generate_pca_transform()">XZ</label>
+                        <label class="inputs"><input type="radio" name="projection" id="projection_X_Z" onclick="generate_pca_transform()">XY</label>
+                        <label class="inputs"><input type="radio" name="projection" id="projection_Z_Y" onclick="generate_pca_transform()">ZY</label>
+                    </div>
+                    <div id="pca_transform"></div>
+                    <p>
+                        Latent walks for filament shape along PC 1 and PC 2.
+                    </p>
+                    <script>generate_pca_transform()</script>
+                </div>
+            </div>
+        </section>
+
+        <section id="footer">
+            <p>references</p>
+        </section>
+    </main>
+
+    <script>
+        const FONT_SIZE = 24
+
+        const main = d3.select("main")
+        const scrolly = main.select("#content")
+        const right = scrolly.select("#right")
+        const left = scrolly.select("#left")
+        const steps = left.selectAll(".step")
+        const sticks = right.selectAll(".stick")
+        const scroller = scrollama()
+
+        init()
+    </script>
+</body>
+
+</html>
