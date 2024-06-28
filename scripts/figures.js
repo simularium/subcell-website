@@ -1,44 +1,23 @@
 function generate_filaments_table() {
     const ID = "filaments_table"
 
-    // Clear existing table.
-    let node = document.getElementById(ID)
-    while (node.firstChild) {
-        node.removeChild(node.firstChild)
-    }
-
     // Get selected replicate.
     let replicate = document.querySelector("input[name=replicate]:checked").id.replace("replicate_", "")
 
-    // Create table.
-    let TABLE = d3.select(`#${ID}`).append("table").append("tbody")
-
-    // Add velocity label row.
-    let row = TABLE.append("tr")
-    row.append("th")
-    row.append("th").attr("colspan", 5).html("Compression velocity (&#181;m/s)")
-
-    // Add velocity headers row.
-    let headers = ["", "0", "4.7", "15", "47", "150"]
-    row = TABLE.append("tr")
-    headers.forEach(header => row.append("th").html(header))
-
     let velocities = ["0000", "0047", "0150", "0470", "1500"]
 
-    // Add links and images for monomer-scale simulations.
-    let monomer_row = TABLE.append("tr")
-    monomer_row.append("th").attr("class", "monomer-scale").text("ReaDDy")
-    velocities.forEach(velocity => monomer_row.append("td")
+    // Update links and images for monomer-scale simulations.
+    velocities.forEach(velocity => d3.select(`#${ID}_monomer_${velocity}`)
+        .html(null)
         .append("a")
         .attr("target", "_blank")
         .attr("href", "https://simularium.allencell.org/viewer?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium")
         .append("img")
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 
-    // Add links and images for fiber-scale simulations.
-    let fiber_row = TABLE.append("tr")
-    fiber_row.append("th").attr("class", "fiber-scale").text("Cytosim")
-    velocities.forEach(velocity => fiber_row.append("td")
+    // Update links and images for fiber-scale simulations.
+    velocities.forEach(velocity => d3.select(`#${ID}_fiber_${velocity}`)
+        .html(null)
         .append("a")
         .attr("target", "_blank")
         .attr("href", "https://simularium.allencell.org/viewer?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium")
@@ -46,12 +25,12 @@ function generate_filaments_table() {
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 }
 
-function generate_pca_trajectories() {
-    const ID = "pca_trajectories"
+function generate_pca_trajectories_or_features() {
+    const ID = "pca_trajectories_or_features"
 
-    const WIDTH = 400
+    const WIDTH = 500
 
-    const HEIGHT = 400
+    const HEIGHT = 300
 
     const MARGIN = {
         "left": 40,
@@ -60,26 +39,100 @@ function generate_pca_trajectories() {
         "bottom": 40,
     }
 
+    // Calculate size of figure .
+    let width = WIDTH - MARGIN.left - MARGIN.right
+    let height = HEIGHT - MARGIN.top - MARGIN.bottom
+
+    // Select axes.
+    let xaxis = {
+        "bounds": [-600, 900],
+        "n": 6,
+        "padding": 250,
+    }
+    let yaxis = {
+        "bounds": [-200, 500],
+        "n": 8,
+        "padding": 30,
+    }
+
+    // Calculate scaling.
+    let xscale = makeHorizontalScale(width, xaxis)
+    let yscale = makeVerticalScale(height, yaxis)
+
+    // Get or create SVG.
+    let SVG = d3.select(`#${ID}`).select("svg")
+    let G = SVG.select("g").select("#data")
+
+    if (SVG.empty()) {
+        // Create SVG.
+        SVG = d3.select(`#${ID}`).append("svg")
+            .attr("width", WIDTH)
+            .attr("height", HEIGHT)
+            .append("g")
+
+        // Add background.
+        SVG.append("rect")
+            .attr("width", WIDTH)
+            .attr("height", HEIGHT)
+            .attr("fill", "#1e1b25")
+
+        // Add offset group.
+        G = SVG.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`)
+
+        // Add border.
+        G.append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("fill", "none")
+            .attr("stroke", "#ccc")
+            .attr("stroke-width", "1px")
+
+        // Add ticks.
+        let ticks = []
+        ticks.push(makeVerticalTicks(0, 0, yaxis, yscale))
+        ticks.push(makeHorizontalTicks(0, height, xaxis, xscale))
+        addTicks(G.append("g"), ticks)
+
+        // Add labels.
+        let labels = G.append("g")
+        labels.append("text")
+            .html('Principal component 1 <tspan font-weight="normal">(88.3%)</tspan>')
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "white")
+            .attr("x", width/2)
+            .attr("y", height + 30)
+        labels.append("text")
+            .html('Principal component 2 <tspan font-weight="normal">(4.6%)</tspan>')
+            .attr("transform", "rotate(-90," + -30 + "," + height / 2 + ")")
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "white")
+            .attr("x", -30)
+            .attr("y", height / 2)
+
+        // Add data group.
+        G = G.append("g").attr("id", "data")
+    }
+
+    // Get selected option.
+    let feature = document.querySelector("input[name=feature]:checked").id.replace("feature_", "")
+
+    if (feature == "SIMULATOR") {
+        generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale)
+    } else (
+        generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale, feature)
+    )
+}
+
+function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale) {
     const COLORS = {
         "READDY": "#ca562c",
         "CYTOSIM": "#008080",
     }
 
-    // Create SVG.
-    let SVG = d3.select(`#${ID}`).append("svg")
-        .attr("width", WIDTH)
-        .attr("height", HEIGHT)
-        .append("g")
-
-    SVG.append("rect")
-        .attr("width", WIDTH)
-        .attr("height", HEIGHT)
-        .attr("fill", "#1e1b25")
-
-    // Calculate size of figure and add offset group.
-    let width = WIDTH - MARGIN.left - MARGIN.right
-    let height = HEIGHT - MARGIN.top - MARGIN.bottom
-    let G = SVG.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`)
+    // Clear contents.
+    G.html(null)
 
     let legend = G.append("g").attr("id", `${ID}_legend`)
     d3.xml("img/legend.svg")
@@ -91,22 +144,6 @@ function generate_pca_trajectories() {
     let file = `data/actin_comparison_panel_pca_trajectories_data.json`
     d3.json(file)
         .then(data => {
-            // Select axes.
-            let xaxis = {
-                "bounds": [-600, 900],
-                "n": 6,
-                "padding": 250,
-            }
-            let yaxis = {
-                "bounds": [-200, 500],
-                "n": 8,
-                "padding": 30,
-            }
-
-            // Calculate scaling.
-            let xscale = makeHorizontalScale(width, xaxis)
-            let yscale = makeVerticalScale(height, yaxis)
-
             // Convert data into paths.
             let entries = data.map((entry) => {
                 let percent = (entry["replicate"] / 4 - 0.5) * 0.5
@@ -114,7 +151,7 @@ function generate_pca_trajectories() {
                     "x": entry["x"],
                     "y": entry["y"],
                     "stroke": shadeColor(COLORS[entry["simulator"]], percent),
-                    "label": `<text y="0" font-weight="bold">${entry["simulator"]}</text><text y="10" font-size="80%">Velocity = ${entry["velocity"]}</text><text y="18" font-size="80%">Replicate = ${entry["replicate"]}</text>`,
+                    "label": makeLabel(entry["simulator"], entry["velocity"], entry["repeat"]),
                 }
             })
 
@@ -139,14 +176,6 @@ function generate_pca_trajectories() {
                     "stroke": shadeColor(COLORS[entry["simulator"]], percent),
                 }
             })
-
-            // Add interaction calls.
-            SVG
-                .on("pointerenter", pointerentered)
-                .on("pointermove", pointermoved)
-                .on("pointerleave", pointerleft)
-                .on("touchstart", event => event.preventDefault())
-                .on("click", click)
 
             // Plot paths.
             let trajectory_paths = G.append("g").selectAll("path").data(entries).enter()
@@ -179,60 +208,31 @@ function generate_pca_trajectories() {
                 .attr("stroke", d => "#fff")
                 .attr("stroke-width", 0.5)
 
-            // Add border.
-            G.append("rect")
-                .attr("width", width)
-                .attr("height", height)
-                .attr("fill", "none")
-                .attr("stroke", "#ccc")
-                .attr("stroke-width", "1px")
+            // Add interaction calls.
+            SVG
+                .on("pointerenter", pointerentered)
+                .on("pointermove", pointermoved)
+                .on("pointerleave", pointerleft)
+                .on("touchstart", event => event.preventDefault())
+                .on("click", click)
 
-            // Add ticks.
-            let ticks = []
-            ticks.push(makeVerticalTicks(0, 0, yaxis, yscale))
-            ticks.push(makeHorizontalTicks(0, height, xaxis, xscale))
-            addTicks(G.append("g"), ticks)
-
-            // Add labels.
-            let labels = G.append("g")
-            labels.append("text")
-                .html(d => 'Principal component 1 <tspan font-weight="normal">(88.3%)</tspan>')
-                .attr("font-size", "8pt")
-                .attr("font-weight", "bold")
-                .attr("font-family", "Helvetica")
-                .attr("text-anchor", "middle")
-                .attr("fill", "white")
-                .attr("x", width/2)
-                .attr("y", height + 30)
-            labels.append("text")
-                .html(d => 'Principal component 2 <tspan font-weight="normal">(4.6%)</tspan>')
-                .attr("transform", "rotate(-90," + -30 + "," + height / 2 + ")")
-                .attr("font-size", "8pt")
-                .attr("font-weight", "bold")
-                .attr("font-family", "Helvetica")
-                .attr("text-anchor", "middle")
-                .attr("fill", "white")
-                .attr("x", -30)
-                .attr("y", height / 2)
-
+            // Add interaction markers.
             let markers = G.append("g")
                 .attr("display", "none")
-
             let text = markers.append("g")
                 .attr("text-anchor", "middle")
                 .attr("fill", "white")
                 .attr("font-size", "75%")
-
             let start_marker = markers.append("path")
                 .attr("d", `m 0,0 m -2.5,0 l 2.5,-2.5 2.5,2.5 -2.5,2.5 z`)
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 0.5)
-
             let end_marker = markers.append("circle")
                 .attr("r", 2)
                 .attr("stroke", "#fff")
                 .attr("stroke-width", 0.5)
 
+            // Format interaction data.
             const points = entries
                 .map((entry, index) => entry.x.map((e, i) => [
                     xscale(e) + MARGIN.left, yscale(entry.y[i]) + MARGIN.top, entry,
@@ -290,6 +290,124 @@ function generate_pca_trajectories() {
             console.log(error)
         })
 }
+
+function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale, feature) {
+    const COLORMAP = [
+        "#f9ddda",
+        "#f2b9c4",
+        "#e597b9",
+        "#ce78b3",
+        "#ad5fad",
+        "#834ba0",
+        "#573b88",
+    ]
+
+    // Set colormap.
+    let colormap = null
+
+    if (feature == "SIMULATOR") {
+    } else if (feature == "COMPRESSION_RATIO") {
+        colormap = d3.scaleLinear()
+            .range(COLORMAP)
+            .domain(linspace(0, 0.3, COLORMAP.length))
+    } else if (feature == "VELOCITY") {
+        colormap = d3.scaleLinear()
+            .range(["#f9ddda", "#e597b9", "#ad5fad", "#573b88"])
+            .domain([4.7, 15, 47, 150])
+    } else if (feature == "PEAK_ASYMMETRY") {
+        colormap = d3.scaleLinear()
+            .range(COLORMAP)
+            .domain(linspace(0, 0.1, COLORMAP.length))
+    } else if (feature == "NON_COPLANARITY") {
+        colormap = d3.scaleLinear()
+            .range(COLORMAP)
+            .domain(linspace(0, 0.01, COLORMAP.length))
+    }
+
+    // Clear contents.
+    G.html(null)
+
+    // Load data.
+    let file = `data/actin_comparison_panel_pca_features_data.csv`
+    d3.csv(file)
+        .then(data => {
+            // Convert data into points.
+            let x = data.map(e => e["PC1"])
+            let y = data.map(e => e["PC2"])
+            let c = data.map(e => colormap(e[feature]))
+            let s = data.map(e => makeLabel(e["SIMULATOR"], e["VELOCITY"], e["REPEAT"]))
+
+            let circles = G.append("g").selectAll("circle")
+                .data(function(d) {
+                    return x.map(function(e, i) {
+                        return {
+                            "x": xscale(e),
+                            "y": yscale(y[i]),
+                            "fill": c[i],
+                            "label": s[i]
+                        }
+                    })
+                })
+                .enter().append("circle")
+                    .attr("cx", d => d.x)
+                    .attr("cy", d => d.y)
+                    .attr("r", 1)
+                    .attr("fill", d => d.fill)
+
+            // Add interaction markers.
+            let markers = G.append("g")
+                .attr("display", "none")
+            let text = markers.append("g")
+                .attr("text-anchor", "middle")
+                .attr("fill", "white")
+                .attr("font-size", "75%")
+
+            // Add interaction calls.
+            SVG
+                .on("pointerenter", pointerentered)
+                .on("pointermove", pointermoved)
+                .on("pointerleave", pointerleft)
+                .on("touchstart", event => event.preventDefault())
+
+            // Format interaction data.
+            const points = data
+                .map(e => [
+                    xscale(e["PC1"]) + MARGIN.left,
+                    yscale(e["PC2"]) + MARGIN.top,
+                    makeLabel(e["SIMULATOR"], e["VELOCITY"], e["REPEAT"])
+                ])
+
+            // Adapted from: https://observablehq.com/@d3/multi-line-chart/2
+            function pointermoved(event) {
+                const [xm, ym] = d3.pointer(event)
+
+                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm, e[1] - ym))
+                const [x, y, k] = points[i]
+
+                circles
+                    .style("fill", (d) => d["label"] === k ? d["fill"] : "#47444D")
+                    .filter((d) => d["label"] === k).raise()
+
+                text
+                    .attr("transform", `translate(${x},${y - 24})`)
+                    .html(k)
+            }
+
+            function pointerentered() {
+                circles.style("fill", "#47444D")
+                markers.attr("display", null)
+            }
+
+            function pointerleft() {
+                circles.style("fill", null)
+                markers.attr("display", "none")
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
 
 function generate_pca_transform() {
     const ID = "pca_transform"

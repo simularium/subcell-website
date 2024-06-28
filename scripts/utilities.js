@@ -116,10 +116,13 @@ function addTicks(G, ticks) {
     g.selectAll("text")
         .data(d => d).enter().append("text")
             .html(d => d.text)
-            .attr("font-size", "6pt")
-            .attr("font-family", "Helvetica")
+            .attr("font-size", "65%")
             .attr("text-anchor", "middle")
             .attr("x", d => d.tx)
             .attr("y", d => d.ty)
             .attr("fill", "#fff")
+}
+
+function makeLabel(simulator, velocity, repeat) {
+    return `<text y="0" font-weight="bold">${simulator}</text><text y="10" font-size="80%">Velocity = ${velocity}</text><text y="18" font-size="80%">Replicate = ${repeat}</text>`
 }
