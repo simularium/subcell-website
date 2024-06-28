@@ -1,3 +1,51 @@
+function generate_filaments_table() {
+    const ID = "filaments_table"
+
+    // Clear existing table.
+    let node = document.getElementById(ID)
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+
+    // Get selected replicate.
+    let replicate = document.querySelector("input[name=replicate]:checked").id.replace("replicate_", "")
+
+    // Create table.
+    let TABLE = d3.select(`#${ID}`).append("table").append("tbody")
+
+    // Add velocity label row.
+    let row = TABLE.append("tr")
+    row.append("th")
+    row.append("th").attr("colspan", 5).html("Compression velocity (&#181;m/s)")
+
+    // Add velocity headers row.
+    let headers = ["", "0", "4.7", "15", "47", "150"]
+    row = TABLE.append("tr")
+    headers.forEach(header => row.append("th").html(header))
+
+    let velocities = ["0000", "0047", "0150", "0470", "1500"]
+
+    // Add links and images for monomer-scale simulations.
+    let monomer_row = TABLE.append("tr")
+    monomer_row.append("th").attr("class", "monomer-scale").text("ReaDDy")
+    velocities.forEach(velocity => monomer_row.append("td")
+        .append("a")
+        .attr("target", "_blank")
+        .attr("href", "https://simularium.allencell.org/viewer?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium")
+        .append("img")
+        .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
+
+    // Add links and images for fiber-scale simulations.
+    let fiber_row = TABLE.append("tr")
+    fiber_row.append("th").attr("class", "fiber-scale").text("Cytosim")
+    velocities.forEach(velocity => fiber_row.append("td")
+        .append("a")
+        .attr("target", "_blank")
+        .attr("href", "https://simularium.allencell.org/viewer?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium")
+        .append("img")
+        .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
+}
+
 function generate_pca_trajectories() {
     const ID = "pca_trajectories"
 

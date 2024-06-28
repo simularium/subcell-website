@@ -4,109 +4,229 @@
 <head>
     <meta charset="utf-8" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://unpkg.com/scrollama"></script>
-    <script type="text/javascript" src="scripts/scrolly.js"></script>
+    <!-- <script src="https://unpkg.com/scrollama"></script> -->
+    <!-- <script type="text/javascript" src="scripts/scrolly.js"></script> -->
     <script type="text/javascript" src="scripts/figures.js"></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@200;400;600&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             font-family: Overpass;
-            font-size: 16px;
+            font-size: 12px;
             color: #d3d3d3;
             background-color: #1e1b25;
             margin: 0;
             padding: 0;
+
         }
 
         main {
+
             max-width: 854px;
             margin: auto;
+            padding: 20px;
+        }
+
+        #header {
+            margin-bottom: 50px;
+        }
+
+        #footer {
+            margin-top: 50px;
         }
 
         h1 {
-            margin-top: 50px;
-            margin-bottom: 0px;
-            font-size: 50px;
+            margin: 20px 0 20px 0;
+            font-size: 400%;
             font-weight: 200;
         }
 
         h2 {
-            font-size: 24px;
+            font-size: 200%;
             font-weight: 400;
         }
 
         h3 {
-            font-size: 14px;
+            font-size: 150%;
             font-weight: 600;
+            margin: 0 0 20px 0;
+        }
+
+        h4 {
+            font-weight: 600;
+            display: inline;
+            padding-right: 10px;
         }
 
         p {
-            font-size: 12px;
+            font-size: 100%;
             font-weight: 100;
+            margin: 0 0 10px 0;
         }
 
-        th, td {
-            font-size: 12px;
+        th,
+        td {
+            padding: 5px;
+            text-align: center;
+        }
+
+        td img {
+            width: 80px;
+        }
+
+        .inputs {
+            padding: 0 0 5px 0;
+            display: block;
+            margin: 0;
+        }
+
+        .inputs select {
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #eee;
+            padding: 5px 0px;
+        }
+
+        .container-label {
+            display: block;
+        }
+
+        .container {
+            display: inline-block;
+            position: relative;
+            margin: 2px 2px 2px 0px;
+            padding-left: 15px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 12px;
+            width: 12px;
+            background-color: #47444D;
+        }
+
+        .checkbox {
+            border-radius: 2px;
+        }
+
+        .radio {
+            border-radius: 100%;
+        }
+
+        .container input:checked~.input {
+            background-color: #8A888E;
+        }
+
+        .input:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .container input:checked~.input:after {
+            display: block;
+        }
+
+        .container .checkbox:after {
+            left: 4px;
+            top: 1px;
+            width: 2px;
+            height: 6px;
+            border: solid #47444D;
+            border-width: 0 2px 2px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .container .radio:after {
+            left: 3px;
+            top: 3px;
+            width: 6px;
+            height: 6px;
+            border-radius: 100%;
+            background: #47444D;
         }
 
         .instructions {
             color: #d092ff;
             font-weight: 400;
-            margin-top: 10px;
         }
 
         .todo {
             color: #FF00FF;
-            font-size: 12px;
         }
 
-        #content {
-            position: relative;
-            display: -webkit-box;
-            display: -ms-flexbox;
+        .monomer-scale {
+            color: #ffae52;
+            font-weight: 400;
+        }
+
+        .fiber-scale {
+            color: #1cbfa4;
+            font-weight: 400;
+        }
+
+        .caption {
+            font-style: italic;
+        }
+
+        .reference {
+            color: #d092ff;
+            text-decoration: none;
+        }
+
+        .interactive {
+            text-align: center;
+        }
+
+        .chunk {
             display: flex;
-            padding: 1rem;
+            margin-bottom: 50px;
         }
 
-        #content>* {
-            -webkit-box-flex: 1;
-            -ms-flex: 1;
-            flex: 1;
+        .left {
+            width: 300px;
+            margin-right: 30px;
+            flex-shrink: 0;
         }
 
-        #left {
-            position: relative;
-            padding-right: 2rem;
-            max-width: 300px;
+        .right {
+            flex-grow: 1;
         }
 
-        #right {
-            position: sticky;
-            z-index: 0;
-        }
+        @media only screen and (max-width: 600px) {
+            .chunk {
+                display: flex;
 
-        .step {
-            color: #47444D;
-            min-height: 500px;
-        }
+                margin-bottom: 50px;
+                flex-flow: column wrap;
+            }
 
-        .step:last-child {
-            margin-bottom: 0;
-        }
+            .left {
+                width: 100%;
 
-        .step.is-active {
-            color: #fff;
-        }
+                margin-right: 10px;
+            }
 
-        .stick {
-            position: absolute;
-            visibility: hidden;
-            padding: 0;
-        }
+            .right {
+                width: 100%;
 
-        .stick.is-active {
-            visibility: visible;
+            }
         }
     </style>
 </head>
@@ -119,11 +239,29 @@
                 Comparing simulations of actin filament bending and twisting reveals tradeoff between
                 computational cost and capturing detailed behaviors
             </h2>
+            <p class="todo">
+                [TODO: add authors and link to paper]
+            </p>
+            <p class="todo">
+                [TODO: prevent popup messages, start at last time point, remove filename title, color filaments orange and teal, better initial camera view]
+            </p>
         </section>
 
         <section id="content">
-            <div id="left">
-                <div class="step">
+            <div class="chunk">
+                <p>
+                    3D Visualization of compressed actin filaments simulated in ReaDDy [<a class="reference" href="#schoneberg_2013_readdy">1</a>]
+                    and Cytosim [<a class="reference" href="#nedelec_2007_collective">2</a>].
+                    Filaments are aligned at the final time step of the simulation.
+                    <span class="monomer-scale">ReaDDy filaments</span> show notable directional biphasic out-of-plane behavior,
+                    indicative of filament twist only captured with monomer-scale resolution.
+                    <span class="fiber-scale">Cytosim filaments</span> showed very little out-of-plane behavior,
+                    and when they did, it was just as likely to be in either direction.
+                </p>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
                     <h3>
                         The dynamic bending and twisting of actin filaments mechanically drive many processes in cells.
                     </h3>
@@ -140,7 +278,15 @@
                         [TODO: more images and videos?]
                     </p>
                 </div>
-                <div class="step">
+                <div class="right">
+                    <p>
+                        Diagram illustrating the role of actin filament bending and twisting in endocytosis.
+                    </p>
+                </div>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
                     <h3>
                         We developed two models of actin to compare twisting and bending at different spatiotemporal scales.
                     </h3>
@@ -155,7 +301,15 @@
                         Cytosim actin filaments are represented by control points that define a mathematical line, which is acted upon by physical forces.
                     </p>
                 </div>
-                <div class="step">
+                <div class="right">
+                    <p>
+                        Diagram of actin filaments modeled at monomer-scale, in which the interactions of each monomer of the filament with its neighbors is explicitly simulated, and fiber-scale, in which the filament is modeled as a series of points connected by simple length and angle-limited springs that have no rotational constraints.
+                    </p>
+                </div>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
                     <h3>
                         We simulated the compression of these filaments to 350 nm across a range of velocities.
                     </h3>
@@ -167,7 +321,39 @@
                         Use the matrix to explore results from different simulators at different compression velocities.
                     </p>
                 </div>
-                <div class="step">
+                <div class="right">
+                    <div class="inputs" id="replicate">
+                        <h4>Simulation replicates</h4>
+                        <label class="container">
+                            <input type="radio" name="replicate" id="replicate_0" onclick="generate_filaments_table()" checked />1
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="replicate" id="replicate_1" onclick="generate_filaments_table()" />2
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="replicate" id="replicate_2" onclick="generate_filaments_table()" />3
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="replicate" id="replicate_3" onclick="generate_filaments_table()" />4
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="replicate" id="replicate_4" onclick="generate_filaments_table()" />5
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="interactive">
+                        <div id="filaments_table"></div>
+                    </div>
+                    <script>generate_filaments_table()</script>
+                </div>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
                     <h3>
                         Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity.
                     </h3>
@@ -179,7 +365,19 @@
                         Explore examples of trajectories with different final time points.
                     </p>
                 </div>
-                <div class="step">
+                <div class="right">
+                    <p class="caption">
+                        Trajectories of filaments in PC space for each simulator, velocity, and replicate. The start or end of each trajectory is marked by a diamond or circle, respectively.
+                    </p>
+                    <div class="interactive">
+                        <div id="pca_trajectories"></div>
+                    </div>
+                    <script>generate_pca_trajectories()</script>
+                </div>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
                     <h3>
                         Monomer-scale simulations captured characteristics of helical structure more effectively than fiber-scale simulations.
                     </h3>
@@ -190,93 +388,63 @@
                         Explore examples of trajectories with different final time points.
                     </p>
                 </div>
-            </div>
-            <div id="right">
-                <div class="stick">
-                    <p>
-                        Diagram illustrating the role of actin filament bending and twisting in endocytosis.
-                    </p>
-                </div>
-                <div class="stick">
-                    <p>
-                        Diagram of actin filaments modeled at monomer-scale, in which the interactions of each monomer of the filament with its neighbors is explicitly simulated, and fiber-scale, in which the filament is modeled as a series of points connected by simple length and angle-limited springs that have no rotational constraints.
-                    </p>
-                </div>
-                <div class="stick">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th></th>
-                                <th>Velocity = 0</th>
-                                <th>Velocity = 4.7</th>
-                                <th>Velocity = 15</th>
-                                <th>Velocity = 47</th>
-                                <th>Velocity = 150</th>
-                            </tr>
-                            <tr>
-                                <th>Simulator = ReaDDy</th>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                            </tr>
-                            <tr>
-                                <th>Simulator = Cytosim</th>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                                <td>(snapshot + link to trajectory)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="stick">
-                    <div id="pca_trajectories"></div>
-                    <p>
-                        Trajectories of filaments in PC space for each simulator, velocity, and replicate. The start or end of each trajectory is marked by a diamond or circle, respectively.
-                    </p>
-                    <script>generate_pca_trajectories()</script>
-                </div>
-                <div class="stick">
-                    <div id="component">
-                        <strong>Principal component</strong>
-                        <label class="inputs"><input type="radio" name="component" id="component_1" checked onclick="generate_pca_transform()">PC1</label>
-                        <label class="inputs"><input type="radio" name="component" id="component_2" onclick="generate_pca_transform()">PC2</label>
-                    </div>
-                    <div id="projection">
-                        <strong>Projection</strong>
-                        <label class="inputs"><input type="radio" name="projection" id="projection_X_Y" checked onclick="generate_pca_transform()">XZ</label>
-                        <label class="inputs"><input type="radio" name="projection" id="projection_X_Z" onclick="generate_pca_transform()">XY</label>
-                        <label class="inputs"><input type="radio" name="projection" id="projection_Z_Y" onclick="generate_pca_transform()">ZY</label>
-                    </div>
-                    <div id="pca_transform"></div>
-                    <p>
+                <div class="right">
+                    <p class="caption">
                         Latent walks for filament shape along PC 1 and PC 2.
                     </p>
+                    <div class="inputs" id="component">
+                        <h4>Principal component</h4>
+                        <label class="container">
+                            <input type="radio" name="component" id="component_1" onclick="generate_pca_transform()" checked />PC 1
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="component" id="component_2" onclick="generate_pca_transform()" />PC 2
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="inputs" id="projection">
+                        <h4>Projection view</h4>
+                        <label class="container">
+                            <input type="radio" name="projection" id="projection_X_Y" onclick="generate_pca_transform()" checked />X / Z
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="projection" id="projection_X_Z" onclick="generate_pca_transform()" />X / Y
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="projection" id="projection_Z_Y" onclick="generate_pca_transform()" />Z / Y
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="interactive">
+                        <div id="pca_transform"></div>
+                    </div>
                     <script>generate_pca_transform()</script>
                 </div>
             </div>
+
         </section>
 
         <section id="footer">
-            <p>references</p>
+            <p id="schoneberg_2013_readdy">[1] Schöneberg J and Noé F. ReaDDy-a software for particle-based reaction-diffusion dynamics in crowded cellular environments. <em>PloS ONE</em>, <strong>8</strong>(9):e74261, 2013.</p>
+            <p id="nedelec_2007_collective">[2] Nedelec F and Foethke D. Collective Langevin dynamics of flexible cytoskeletal fibers. <em>New Journal of Physics</em>, <strong>9</strong>(11):427, 2007.</p>
         </section>
     </main>
 
     <script>
-        const FONT_SIZE = 24
+        // const FONT_SIZE = 24
 
-        const main = d3.select("main")
-        const scrolly = main.select("#content")
-        const right = scrolly.select("#right")
-        const left = scrolly.select("#left")
-        const steps = left.selectAll(".step")
-        const sticks = right.selectAll(".stick")
-        const scroller = scrollama()
+        // const main = d3.select("main")
+        // const scrolly = main.select("#content")
+        // const right = scrolly.select("#right")
+        // const left = scrolly.select("#left")
+        // const steps = left.selectAll(".step")
+        // const sticks = right.selectAll(".stick")
+        // const scroller = scrollama()
 
-        init()
+        // init()
     </script>
 </body>
 
