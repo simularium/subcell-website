@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
     <script type="text/javascript" src="scripts/figures.js"></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>
     <link rel="stylesheet" href="style/style2.css">
@@ -196,6 +197,83 @@
             <div class="chunk">
                 <div class="left">
                     <h3>
+                        X
+                    </h3>
+                    <p>
+                        X
+                    </p>
+
+                    <p class="instructions">
+                        X
+                    </p>
+                </div>
+                <div class="right">
+                    <p class="caption">
+                        x
+                    </p>
+                    <div class="inputs" id="velocity">
+                        <h4>Compression velocity</h4>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_0047" onclick="generate_compression_metrics()" checked />
+                            4.7 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_0150" onclick="generate_compression_metrics()" />
+                            15 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_0470" onclick="generate_compression_metrics()" />
+                            47 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_1500" onclick="generate_compression_metrics()" />
+                            150 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="inputs" id="metric">
+                        <h4>Compression metric</h4>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_peak_asymmetry" onclick="generate_compression_metrics()" checked />
+                            Peak asymmetry
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_non_coplanarity" onclick="generate_compression_metrics()" />
+                            Non-coplanarity
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_compression_ratio" onclick="generate_compression_metrics()" />
+                            Compression ratio
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_average_perp_distance" onclick="generate_compression_metrics()" />
+                            Average perpendicular distance
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_contour_length" onclick="generate_compression_metrics()" />
+                            Contour length
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="centered">
+                        <div id="compression_metrics"></div>
+                    </div>
+                    <script>
+                        generate_compression_metrics()
+                    </script>
+                </div>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
+                    <h3>
                         Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity.
                     </h3>
                     <p>
@@ -213,27 +291,27 @@
                     <div class="inputs" id="feature">
                         <h4>Feature</h4>
                         <label class="container">
-                            <input type="radio" name="feature" id="feature_SIMULATOR" onclick="generate_pca_trajectories_or_features()" checked />
+                            <input type="radio" name="feature" id="feature_simulator" onclick="generate_pca_trajectories_or_features()" checked />
                             Simulator trajectories
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="feature" id="feature_COMPRESSION_RATIO" onclick="generate_pca_trajectories_or_features()" />
+                            <input type="radio" name="feature" id="feature_compression_ratio" onclick="generate_pca_trajectories_or_features()" />
                             Compression ratio
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="feature" id="feature_VELOCITY" onclick="generate_pca_trajectories_or_features()" />
+                            <input type="radio" name="feature" id="feature_velocity" onclick="generate_pca_trajectories_or_features()" />
                             Compression velocity
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="feature" id="feature_PEAK_ASYMMETRY" onclick="generate_pca_trajectories_or_features()" />
+                            <input type="radio" name="feature" id="feature_peak_asymmetry" onclick="generate_pca_trajectories_or_features()" />
                             Peak asymmetry
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="feature" id="feature_NON_COPLANARITY" onclick="generate_pca_trajectories_or_features()" />
+                            <input type="radio" name="feature" id="feature_non_coplanarity" onclick="generate_pca_trajectories_or_features()" />
                             Non-coplanarity
                             <span class="input radio"></span>
                         </label>

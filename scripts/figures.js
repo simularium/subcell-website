@@ -25,6 +25,237 @@ function generate_filaments_table() {
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 }
 
+function generate_compression_metrics() {
+    const ID = "compression_metrics"
+
+    const WIDTH = 500
+
+    const HEIGHT = 300
+
+    const MARGIN = {
+        "left": 40,
+        "right": 5,
+        "top": 5,
+        "bottom": 40,
+    }
+
+    const COLORS = {
+        "readdy": "#ca562c",
+        "cytosim": "#008080",
+    }
+
+    const LABELS = {
+        "non_coplanarity": "Non-coplanarity",
+        "peak_asymmetry": "Peak asymmetry",
+        "average_perp_distance": "Average perpendicular distance",
+        "contour_length": "Contour length",
+        "compression_ratio": "Compression ratio",
+    }
+
+    // Calculate size of figure .
+    let width = WIDTH - MARGIN.left - MARGIN.right
+    let height = HEIGHT - MARGIN.top - MARGIN.bottom
+
+    // Select axes.
+    let xaxis = {
+        "bounds": [0, 1],
+        "n": 6,
+        "padding": 0.02,
+    }
+    let yaxis = {
+        "peak_asymmetry": {
+            "bounds": [0, 0.4],
+            "padding": 0.02,
+            "n": 5,
+        },
+        "non_coplanarity": {
+            "bounds": [0, 0.04],
+            "padding": 0.002,
+            "n": 5,
+        },
+        "compression_ratio": {
+            "bounds": [0, 0.4],
+            "padding": 0.01,
+            "n": 5,
+        },
+        "average_perp_distance": {
+            "bounds": [0, 100],
+            "padding": 5,
+            "n": 6,
+        },
+        "contour_length": {
+            "bounds": [490, 500],
+            "padding": 1,
+            "n": 6,
+        },
+    }
+
+    // Get selected velocity and metric.
+    let velocity = document.querySelector("input[name=velocity]:checked").id.replace("velocity_", "")
+    let metric = document.querySelector("input[name=metric]:checked").id.replace("metric_", "")
+
+    // Calculate scaling.
+    let xscale = makeHorizontalScale(width, xaxis)
+    let yscale = makeVerticalScale(height, yaxis[metric])
+
+    // Get or create SVG.
+    let SVG = d3.select(`#${ID}`).select("svg")
+    let G = SVG.select("g").select("#data")
+
+    if (SVG.empty()) {
+        // Create SVG.
+        SVG = d3.select(`#${ID}`).append("svg")
+            .attr("width", WIDTH)
+            .attr("height", HEIGHT)
+            .append("g")
+
+        // Add background.
+        SVG.append("rect")
+            .attr("width", WIDTH)
+            .attr("height", HEIGHT)
+            .attr("fill", "#1e1b25")
+
+        // Add offset group.
+        G = SVG.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`)
+
+        // Add border.
+        G.append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("fill", "none")
+            .attr("stroke", "#ccc")
+            .attr("stroke-width", "1px")
+
+        // Add labels.
+        let labels = G.append("g")
+        labels.append("text")
+            .html('Normalized time')
+            .attr("font-weight", "bold")
+            .attr("text-anchor", "middle")
+            .attr("fill", "white")
+            .attr("x", width/2)
+            .attr("y", height + 30)
+
+        // Add data group.
+        G = G.append("g").attr("id", "data")
+    }
+
+    // Clear contents.
+    G.html(null)
+
+    // Add ticks.
+    let ticks = []
+    ticks.push(makeVerticalTicks(0, 0, yaxis[metric], yscale))
+    ticks.push(makeHorizontalTicks(0, height, xaxis, xscale))
+    addTicks(G.append("g"), ticks)
+
+    // Add labels.
+    let labels = G.append("g")
+    labels.append("text")
+        .html(LABELS[metric])
+        .attr("transform", "rotate(-90," + -30 + "," + height / 2 + ")")
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .attr("x", -30)
+        .attr("y", height / 2)
+
+    // Aggregation function.
+    let getTracks = function(entries, metric) {
+        return {
+            "x": entries.map(e => e["normalized_time"]),
+            "y": entries.map(e => e[metric]),
+        }
+    }
+
+    // Load data.
+    let file = `data/actin_compression_combined_metrics.csv`
+    d3.csv(file)
+        .then(data => {
+            // Filter and group data.
+            let filtered = data.filter(d => d.key == velocity)
+            let grouped = d3.flatRollup(filtered, d => getTracks(d, metric), d => d.simulator, d => d.repeat)
+
+            // Convert data into paths.
+            let entries = grouped.map(([simulator, repeat, entry]) => {
+                let percent = (repeat / 4 - 0.5) * 0.5
+                return {
+                    "x": entry["x"],
+                    "y": entry["y"],
+                    "stroke": shadeColor(COLORS[simulator], percent),
+                    "label": makeLabel(simulator, null, repeat),
+                }
+            })
+
+            // Plot paths.
+            let trajectory_paths = G.selectAll("path").data(entries).enter()
+                .append("path")
+                .attr("d", function(d) {
+                    let makePath = d3.line()
+                        .x(m => xscale(m))
+                        .y((m,i) => yscale(d.y[i]))
+                    return makePath(d.x)
+                })
+                .attr("fill", d => "none")
+                .attr("stroke", d => d.stroke)
+                .attr("stroke-width", 1)
+
+            // Add interaction markers.
+            let markers = G.append("g")
+                .attr("display", "none")
+            let text = markers.append("g")
+                .attr("text-anchor", "middle")
+                .attr("fill", "white")
+                .attr("font-size", "75%")
+
+            // Add interaction calls.
+            SVG
+                .on("pointerenter", pointerentered)
+                .on("pointermove", pointermoved)
+                .on("pointerleave", pointerleft)
+                .on("touchstart", event => event.preventDefault())
+
+            // Format interaction data.
+            const points = entries
+                .map((entry, index) => entry.x.map((e, i) => [
+                    xscale(e),
+                    yscale(entry.y[i]),
+                    entry,
+                ]))
+                .flat()
+
+            function pointermoved(event) {
+                const [xm, ym] = d3.pointer(event)
+
+                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm + MARGIN.left, e[1] - ym + MARGIN.top))
+                const [x, y, k] = points[i]
+
+                trajectory_paths
+                    .style("stroke", (d) => d === k ? d["stroke"] : "#47444D")
+                    .filter((d) => d === k).raise()
+
+                markers.raise()
+
+                text
+                    .attr("transform", `translate(${x},${y - 24})`)
+                    .html(k["label"])
+            }
+
+            function pointerentered() {
+                trajectory_paths.style("stroke", "#47444D")
+                markers.attr("display", null)
+            }
+
+            function pointerleft() {
+                trajectory_paths.style("stroke", null)
+                markers.attr("display", "none")
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+}
+
 function generate_pca_trajectories_or_features() {
     const ID = "pca_trajectories_or_features"
 
@@ -45,14 +276,14 @@ function generate_pca_trajectories_or_features() {
 
     // Select axes.
     let xaxis = {
-        "bounds": [-600, 900],
+        "bounds": [-900, 600],
         "n": 6,
         "padding": 250,
     }
     let yaxis = {
-        "bounds": [-200, 500],
+        "bounds": [-500, 200],
         "n": 8,
-        "padding": 30,
+        "padding": 50,
     }
 
     // Calculate scaling.
@@ -96,7 +327,7 @@ function generate_pca_trajectories_or_features() {
         // Add labels.
         let labels = G.append("g")
         labels.append("text")
-            .html('Principal component 1 <tspan font-weight="normal">(88.3%)</tspan>')
+            .html('Principal component 1 <tspan font-weight="normal">(89.3%)</tspan>')
             .attr("font-weight", "bold")
             .attr("text-anchor", "middle")
             .attr("fill", "white")
@@ -118,7 +349,7 @@ function generate_pca_trajectories_or_features() {
     // Get selected option.
     let feature = document.querySelector("input[name=feature]:checked").id.replace("feature_", "")
 
-    if (feature == "SIMULATOR") {
+    if (feature == "simulator") {
         generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale)
     } else (
         generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale, feature)
@@ -141,7 +372,7 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
         })
 
     // Load data.
-    let file = `data/actin_comparison_panel_pca_trajectories_data.json`
+    let file = `data/actin_compression_pca_trajectories.json`
     d3.json(file)
         .then(data => {
             // Convert data into paths.
@@ -151,7 +382,7 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
                     "x": entry["x"],
                     "y": entry["y"],
                     "stroke": shadeColor(COLORS[entry["simulator"]], percent),
-                    "label": makeLabel(entry["simulator"], entry["velocity"], entry["repeat"]),
+                    "label": makeLabel(entry["simulator"], entry["velocity"], entry["replicate"]),
                 }
             })
 
@@ -235,9 +466,13 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
             // Format interaction data.
             const points = entries
                 .map((entry, index) => entry.x.map((e, i) => [
-                    xscale(e) + MARGIN.left, yscale(entry.y[i]) + MARGIN.top, entry,
-                    xscale(entry.x[0]), yscale(entry.y[0]),
-                    xscale(entry.x[entry.x.length - 1]), yscale(entry.y[entry.y.length - 1])
+                    xscale(e),
+                    yscale(entry.y[i]),
+                    entry,
+                    xscale(entry.x[0]),
+                    yscale(entry.y[0]),
+                    xscale(entry.x[entry.x.length - 1]),
+                    yscale(entry.y[entry.y.length - 1]),
                 ]))
                 .flat()
 
@@ -245,7 +480,7 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
             function pointermoved(event) {
                 const [xm, ym] = d3.pointer(event)
 
-                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm, e[1] - ym))
+                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm + MARGIN.left, e[1] - ym + MARGIN.top))
                 const [x, y, k, x0, y0, x1, y1, label] = points[i]
 
                 trajectory_paths
@@ -305,20 +540,19 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
     // Set colormap.
     let colormap = null
 
-    if (feature == "SIMULATOR") {
-    } else if (feature == "COMPRESSION_RATIO") {
+    if (feature == "compression_ratio") {
         colormap = d3.scaleLinear()
             .range(COLORMAP)
             .domain(linspace(0, 0.3, COLORMAP.length))
-    } else if (feature == "VELOCITY") {
+    } else if (feature == "velocity") {
         colormap = d3.scaleLinear()
             .range(["#f9ddda", "#e597b9", "#ad5fad", "#573b88"])
             .domain([4.7, 15, 47, 150])
-    } else if (feature == "PEAK_ASYMMETRY") {
+    } else if (feature == "peak_asymmetry") {
         colormap = d3.scaleLinear()
             .range(COLORMAP)
             .domain(linspace(0, 0.1, COLORMAP.length))
-    } else if (feature == "NON_COPLANARITY") {
+    } else if (feature == "non_coplanarity") {
         colormap = d3.scaleLinear()
             .range(COLORMAP)
             .domain(linspace(0, 0.01, COLORMAP.length))
@@ -329,13 +563,19 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
 
     // Load data.
     let file = `data/actin_comparison_panel_pca_features_data.csv`
-    d3.csv(file)
-        .then(data => {
+    file = "data/pca.csv"
+
+    Promise.all([
+        d3.csv("data/actin_compression_pca_results.csv"),
+        d3.csv("data/actin_compression_combined_metrics.csv"),
+    ]).then(data => {
             // Convert data into points.
-            let x = data.map(e => e["PC1"])
-            let y = data.map(e => e["PC2"])
-            let c = data.map(e => colormap(e[feature]))
-            let s = data.map(e => makeLabel(e["SIMULATOR"], e["VELOCITY"], e["REPEAT"]))
+            let feature_map = d3.map(data[1], e => `${e["simulator"]}_${e["velocity"]}_${e["repeat"]}_${e["time"]}`)
+            let x = data[0].map(e => e["PCA1"])
+            let y = data[0].map(e => e["PCA2"])
+            let s = data[0].map(e => makeLabel(e["SIMULATOR"], e["VELOCITY"], e["REPEAT"]))
+            let v = data[0].map(e => feature_map.get(`${e["SIMULATOR"].toLowerCase()}_${e["VELOCITY"]}_${e["REPEAT"]}_${e["TIME"]}`)[feature])
+            let c = v.map(e => colormap(e))
 
             let circles = G.append("g").selectAll("circle")
                 .data(function(d) {
@@ -343,7 +583,7 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
                         return {
                             "x": xscale(e),
                             "y": yscale(y[i]),
-                            "fill": c[i],
+                            "fill": colormap(v[i]),
                             "label": s[i]
                         }
                     })
@@ -370,18 +610,18 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
                 .on("touchstart", event => event.preventDefault())
 
             // Format interaction data.
-            const points = data
+            const points = data[0]
                 .map(e => [
-                    xscale(e["PC1"]) + MARGIN.left,
-                    yscale(e["PC2"]) + MARGIN.top,
-                    makeLabel(e["SIMULATOR"], e["VELOCITY"], e["REPEAT"])
+                    xscale(e["PCA1"]),
+                    yscale(e["PCA2"]),
+                    makeLabel(e["SIMULATOR"], e["VELOCITY"], e["REPEAT"]),
                 ])
 
             // Adapted from: https://observablehq.com/@d3/multi-line-chart/2
             function pointermoved(event) {
                 const [xm, ym] = d3.pointer(event)
 
-                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm, e[1] - ym))
+                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm + MARGIN.left, e[1] - ym + MARGIN.top))
                 const [x, y, k] = points[i]
 
                 circles
@@ -408,7 +648,6 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
         })
 }
 
-
 function generate_pca_transform() {
     const ID = "pca_transform"
 
@@ -424,8 +663,8 @@ function generate_pca_transform() {
     }
 
     const BOUNDS = {
-        "1": [-600, 900, 300],
-        "2": [-200, 400, 200],
+        "1": [-900, 600, 300],
+        "2": [-600, 200, 200],
     }
 
     const COLORMAP = [
@@ -471,7 +710,7 @@ function generate_pca_transform() {
         .domain(linspace(BOUNDS[component][0], BOUNDS[component][1], COLORMAP.length))
 
     // Load data.
-    let file = `data/actin_comparison_panel_pca_transform_data.json`
+    let file = `data/actin_compression_pca_transforms.json`
     d3.json(file)
         .then(data => {
             // Select axes.

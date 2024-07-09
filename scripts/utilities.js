@@ -124,5 +124,9 @@ function addTicks(G, ticks) {
 }
 
 function makeLabel(simulator, velocity, repeat) {
-    return `<text y="0" font-weight="bold">${simulator}</text><text y="10" font-size="80%">Velocity = ${velocity}</text><text y="18" font-size="80%">Replicate = ${repeat}</text>`
+    if (velocity == null){
+        return `<text y="0" font-weight="bold">${simulator.toUpperCase()}</text><text y="10" font-size="80%">Replicate = ${repeat}</text>`
+    } else {
+        return `<text y="0" font-weight="bold">${simulator.toUpperCase()}</text><text y="10" font-size="80%">Velocity = ${velocity}</text><text y="18" font-size="80%">Replicate = ${repeat}</text>`
+    }
 }
