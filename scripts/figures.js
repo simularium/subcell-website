@@ -561,10 +561,6 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
     // Clear contents.
     G.html(null)
 
-    // Load data.
-    let file = `data/actin_comparison_panel_pca_features_data.csv`
-    file = "data/pca.csv"
-
     Promise.all([
         d3.csv("data/actin_compression_pca_results.csv"),
         d3.csv("data/actin_compression_combined_metrics.csv"),
@@ -656,26 +652,37 @@ function generate_pca_transform() {
     const HEIGHT = 200
 
     const MARGIN = {
-        "left": 0,
-        "right": 0,
-        "top": 0,
-        "bottom": 0,
+        left: 20,
+        right: 20,
+        top: 0,
+        bottom: 5,
     }
 
-    const BOUNDS = {
-        "1": [-900, 600, 300],
-        "2": [-600, 200, 200],
+    let XAXIS = {
+        PCA1: {
+            "bounds": [-900, 600],
+            "n": 6,
+            "padding": 250,
+            "interval": 300,
+        },
+        PCA2: {
+            "bounds": [-500, 200],
+            "n": 8,
+            "padding": 50,
+            "interval": 200,
+        }
     }
 
-    const COLORMAP = [
-        "#f9ddda",
-        "#f2b9c4",
-        "#e597b9",
-        "#ce78b3",
-        "#ad5fad",
-        "#834ba0",
-        "#573b88",
-    ]
+    let YAXIS = {
+        PCA1: {
+            "bounds": [0, 650 / 2]
+        },
+        PCA2: {
+            "bounds": [0, 650]
+        }
+    }
+
+    const COLORMAP = ["#f9ddda", "#f2b9c4", "#e597b9", "#ce78b3", "#ad5fad", "#834ba0", "#573b88"]
 
     // Clear canvas.
     let node = document.getElementById(ID)
@@ -684,15 +691,14 @@ function generate_pca_transform() {
     }
 
     // Create SVG.
-    let SVG = d3.select(`#${ID}`).append("svg")
+    let SVG = d3
+        .select(`#${ID}`)
+        .append("svg")
         .attr("width", WIDTH)
         .attr("height", HEIGHT)
         .append("g")
 
-    SVG.append("rect")
-        .attr("width", WIDTH)
-        .attr("height", HEIGHT)
-        .attr("fill", "#1e1b25")
+    SVG.append("rect").attr("width", WIDTH).attr("height", HEIGHT).attr("fill", "#1e1b25")//.attr('stroke', 'red')
 
     // Calculate size of figure and add offset group.
     let width = WIDTH - MARGIN.left - MARGIN.right
@@ -700,56 +706,113 @@ function generate_pca_transform() {
     let G = SVG.append("g").attr("transform", `translate(${MARGIN.left},${MARGIN.top})`)
 
     // Get selected option.
-    let projection = document.querySelector("input[name=projection]:checked").id.replace("projection_", "")
-    let component = document.querySelector("input[name=component]:checked").id.replace("component_", "")
-    let horizontal = projection.split("_")[0].toLowerCase()
-    let vertical = projection.split("_")[1].toLowerCase()
+    let component = document
+        .querySelector("input[name=component]:checked")
+        .id.replace("component_", "")
+    let component_number = Number(component.replace("PCA", ""))
 
-    let colormap = d3.scaleLinear()
+    // Get axis
+    let xaxis = XAXIS[component]
+    let yaxis = YAXIS[component]
+
+    let colormap = d3
+        .scaleLinear()
         .range(COLORMAP)
-        .domain(linspace(BOUNDS[component][0], BOUNDS[component][1], COLORMAP.length))
+        .domain(linspace(xaxis.bounds[0], xaxis.bounds[1], COLORMAP.length))
 
-    // Load data.
-    let file = `data/actin_compression_pca_transforms.json`
-    d3.json(file)
-        .then(data => {
-            // Select axes.
-            let xaxis = {
-                "bounds": [-270, 270],
-                "n": 6,
-                "padding": 0,
-            }
-            let yaxis = {
-                "bounds": [-270, 270],
-                "padding": 0,
-            }
-
+    Promise.all([
+        d3.csv("data/actin_compression_pca_results.csv"),
+        d3.json("data/actin_compression_pca_transforms.json"),
+    ]).then(data => {
             // Calculate scaling.
             let xscale = makeHorizontalScale(width, xaxis)
-            let yscale = makeVerticalScale(height, yaxis)
+            let yscale = makeVerticalScale(50, yaxis)
+
+            // Create slider.
+            let slider = d3
+                .sliderHorizontal(xscale)
+                .min(xaxis.bounds[0] - xaxis.padding)
+                .max(xaxis.bounds[1] + xaxis.padding)
+                .step(50)
+                .width(WIDTH - MARGIN.left - MARGIN.right)
+                // .height()
+                .tickValues(linspace(xaxis.bounds[0], xaxis.bounds[1], xaxis.n))
+                .handle("M7.979,0A7.979,7.979,0,1,1,-7.979,0A7.979,7.979,0,1,1,7.979,0")
+                .displayValue(false)
+                .on('onchange', slidermoved)
+
+            d3.select(`#${ID}_slider`)
+                .html(null)
+                .append('svg')
+                .attr('width', WIDTH)
+                .attr('height', 40)
+                .append('g')
+                .attr('transform', `translate(${MARGIN.left},5)`)
+                .call(slider)
+
+            // Convert data into histograms.
+            let cytosim = data[0].filter(d => d["SIMULATOR"] == "CYTOSIM")
+            let readdy = data[0].filter(d => d["SIMULATOR"] == "READDY")
+            let domain = [xaxis.bounds[0] - xaxis.padding, xaxis.bounds[1] + xaxis.padding]
+            let thresholds = linspace(domain[0], domain[1], 51)
+
+            // Set histogram parameters for the histogram
+            const histogram = d3.bin()
+                .value(d => d[component])
+                .domain(domain)
+                .thresholds(thresholds)
+
+            let entries = [
+                {
+                    "bins": histogram(cytosim),
+                    "stroke": "#008080",
+                },
+                {
+                    "bins": histogram(readdy),
+                    "stroke": "#ca562c",
+                }
+            ]
+
+            // Plot paths.
+            G.append("g")
+                .attr("transform", `translate(0,${HEIGHT - 50})`)
+                .selectAll("path").data(entries).enter()
+                .append("path")
+                .attr("d", function(d) {
+                    let makePath = d3.line()
+                        .x((m,i) => xscale(m.x0))
+                        .y((m,i) => yscale(m.length))
+                        .curve(d3.curveStepAfter)
+                    return makePath(d.bins)
+                })
+                .attr("fill", d => d.stroke)
+                .attr("fill-opacity", 0.5)
+                .attr("stroke", d => d.stroke)
+                .attr("stroke-width", 1)
+
+            // // Add border.
+            // G.append("rect")
+            //     .attr("width", width)
+            //     .attr("height", height)
+            //     .attr("fill", "none")
+            //     .attr("stroke", "#ccc")
+            //     .attr("stroke-width", "1px")
 
             // Convert data into paths.
-            let entries = data
-                .filter(d => d["component"] == component)
+            let transform_entries = data[1]
+                .filter(d => d["component"] == component_number)
                 .map((entry) => {
                     let point = entry["point"]
                     return {
-                        "x": entry[horizontal],
-                        "y": entry[vertical],
+                        "x": entry["x"],
+                        "y": entry["y"],
                         "stroke": colormap(point),
+                        "point": point
                     }
                 })
 
-            // Plot reference.
-            if (projection != "Z_Y") {
-                G.append("path")
-                .attr("d", `m ${xscale(-260)},${yscale(0)} l ${xscale(230)},0`)
-                .attr("stroke", "#555")
-                .attr("stroke-dasharray", "2,2")
-            }
-
             // Plot paths.
-            G.append("g").selectAll("path").data(entries).enter()
+            let paths = G.append("g").selectAll("path").data(transform_entries).enter()
                 .append("path")
                 .attr("d", function(d) {
                     let makePath = d3.line()
@@ -758,10 +821,17 @@ function generate_pca_transform() {
                     return makePath(d.x)
                 })
                 .attr("fill", d => "none")
-                .attr("stroke", d => d.stroke)
+                .attr("stroke", d => (d.point == 0 ? d.stroke : "none"))
                 .attr("stroke-width", 1)
+
+            function slidermoved(event) {
+                let point = Math.round(event)
+                paths
+                    .style("stroke", (d) => d.point === point ? d.stroke : "none")
+                    .filter((d) => d.point === point).raise()
+            }
         })
-        .catch(error => {
+        .catch((error) => {
             console.log(error)
         })
 }

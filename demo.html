@@ -342,31 +342,17 @@
                     <div class="inputs" id="component">
                         <h4>Principal component</h4>
                         <label class="container">
-                            <input type="radio" name="component" id="component_1" onclick="generate_pca_transform()" checked />PC 1
+                            <input type="radio" name="component" id="component_PCA1" onclick="generate_pca_transform()" checked />PC 1
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="component" id="component_2" onclick="generate_pca_transform()" />PC 2
-                            <span class="input radio"></span>
-                        </label>
-                    </div>
-                    <div class="inputs" id="projection">
-                        <h4>Projection view</h4>
-                        <label class="container">
-                            <input type="radio" name="projection" id="projection_X_Y" onclick="generate_pca_transform()" checked />X / Z
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="projection" id="projection_X_Z" onclick="generate_pca_transform()" />X / Y
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="projection" id="projection_Z_Y" onclick="generate_pca_transform()" />Z / Y
+                            <input type="radio" name="component" id="component_PCA2" onclick="generate_pca_transform()" />PC 2
                             <span class="input radio"></span>
                         </label>
                     </div>
                     <div class="centered">
                         <div id="pca_transform"></div>
+                        <div id="pca_transform_slider"></div>
                     </div>
                     <script>generate_pca_transform()</script>
                 </div>

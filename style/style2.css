@@ -241,3 +241,13 @@ td img {
     width: 100%;
     height: 100%;
 }
+
+
+.axis text,
+.slider text {
+    font-size: 80%;
+}
+
+.axis text {
+    fill: #d3d3d3;
+  }
