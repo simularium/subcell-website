@@ -647,7 +647,7 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
 function generate_pca_transform() {
     const ID = "pca_transform"
 
-    const WIDTH = 450
+    const WIDTH = 500
 
     const HEIGHT = 320
 
