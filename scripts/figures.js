@@ -649,12 +649,12 @@ function generate_pca_transform() {
 
     const WIDTH = 450
 
-    const HEIGHT = 200
+    const HEIGHT = 320
 
     const MARGIN = {
         left: 20,
         right: 20,
-        top: 0,
+        top: 10,
         bottom: 5,
     }
 
@@ -670,6 +670,10 @@ function generate_pca_transform() {
             "n": 8,
             "padding": 50,
             "interval": 200,
+        },
+        INSET: {
+            "bounds": [-280, 280],
+            "padding": 0,
         }
     }
 
@@ -679,6 +683,10 @@ function generate_pca_transform() {
         },
         PCA2: {
             "bounds": [0, 650]
+        },
+        INSET: {
+            "bounds": [-280, 280],
+            "padding": 0,
         }
     }
 
@@ -718,7 +726,21 @@ function generate_pca_transform() {
     let colormap = d3
         .scaleLinear()
         .range(COLORMAP)
-        .domain(linspace(xaxis.bounds[0], xaxis.bounds[1], COLORMAP.length))
+        .domain(linspace(xaxis.bounds[0] - xaxis.padding, xaxis.bounds[1] + xaxis.padding, COLORMAP.length))
+
+    let INSET_SIZE = 350
+    let padding = 10
+    let hscale = 0.4
+    let vscale = 0.25
+    let lscale = 0.25
+    let offset = (width - ((1 + vscale) * INSET_SIZE) - padding) / 2
+    let INSETS = G.append("g").attr("transform", `translate(${offset},0)`)
+    let XY = INSETS.append("g").attr("transform", `translate(${vscale * INSET_SIZE + padding},0)`)
+    createInset(XY, INSET_SIZE, hscale * INSET_SIZE, "X", "Y")
+    let XZ = INSETS.append("g").attr("transform", `translate(${vscale * INSET_SIZE + padding},${hscale * INSET_SIZE + padding})`)
+    createInset(XZ, INSET_SIZE, lscale * INSET_SIZE, "X", "Z")
+    let YZ = INSETS.append("g").attr("transform", `translate(0,0)`)
+    createInset(YZ, vscale * INSET_SIZE, hscale * INSET_SIZE, "Y", "Z")
 
     Promise.all([
         d3.csv("data/actin_compression_pca_results.csv"),
@@ -735,7 +757,6 @@ function generate_pca_transform() {
                 .max(xaxis.bounds[1] + xaxis.padding)
                 .step(50)
                 .width(WIDTH - MARGIN.left - MARGIN.right)
-                // .height()
                 .tickValues(linspace(xaxis.bounds[0], xaxis.bounds[1], xaxis.n))
                 .handle("M7.979,0A7.979,7.979,0,1,1,-7.979,0A7.979,7.979,0,1,1,7.979,0")
                 .displayValue(false)
@@ -745,9 +766,9 @@ function generate_pca_transform() {
                 .html(null)
                 .append('svg')
                 .attr('width', WIDTH)
-                .attr('height', 40)
+                .attr('height', 50)
                 .append('g')
-                .attr('transform', `translate(${MARGIN.left},5)`)
+                .attr('transform', `translate(${MARGIN.left},10)`)
                 .call(slider)
 
             // Convert data into histograms.
@@ -775,7 +796,7 @@ function generate_pca_transform() {
 
             // Plot paths.
             G.append("g")
-                .attr("transform", `translate(0,${HEIGHT - 50})`)
+                .attr("transform", `translate(0,${height - 50})`)
                 .selectAll("path").data(entries).enter()
                 .append("path")
                 .attr("d", function(d) {
@@ -790,13 +811,8 @@ function generate_pca_transform() {
                 .attr("stroke", d => d.stroke)
                 .attr("stroke-width", 1)
 
-            // // Add border.
-            // G.append("rect")
-            //     .attr("width", width)
-            //     .attr("height", height)
-            //     .attr("fill", "none")
-            //     .attr("stroke", "#ccc")
-            //     .attr("stroke-width", "1px")
+            let xscale_inset = makeHorizontalScale(INSET_SIZE, XAXIS["INSET"])
+            let yscale_inset = makeVerticalScale(INSET_SIZE, YAXIS["INSET"])
 
             // Convert data into paths.
             let transform_entries = data[1]
@@ -806,27 +822,67 @@ function generate_pca_transform() {
                     return {
                         "x": entry["x"],
                         "y": entry["y"],
+                        "z": entry["z"],
                         "stroke": colormap(point),
                         "point": point
                     }
                 })
 
             // Plot paths.
-            let paths = G.append("g").selectAll("path").data(transform_entries).enter()
+            let xy_paths = XY.append("g")
+                .attr("transform", "translate(10,-50)")
+                .selectAll("path").data(transform_entries).enter()
                 .append("path")
                 .attr("d", function(d) {
                     let makePath = d3.line()
-                        .x(m => xscale(m))
-                        .y((m,i) => yscale(d.y[i]))
+                        .x(m => xscale_inset(m))
+                        .y((m,i) => yscale_inset(d.y[i]))
                     return makePath(d.x)
                 })
                 .attr("fill", d => "none")
                 .attr("stroke", d => (d.point == 0 ? d.stroke : "none"))
-                .attr("stroke-width", 1)
+                .attr("stroke-width", 2)
+                .attr("stroke-linecap", "round")
+
+            let xz_paths = XZ.append("g")
+                .attr("transform", "translate(10,-130)")
+                .selectAll("path").data(transform_entries).enter()
+                .append("path")
+                .attr("d", function(d) {
+                    let makePath = d3.line()
+                        .x(m => xscale_inset(m))
+                        .y((m,i) => yscale_inset(d.z[i]))
+                    return makePath(d.x)
+                })
+                .attr("fill", d => "none")
+                .attr("stroke", d => (d.point == 0 ? d.stroke : "none"))
+                .attr("stroke-width", 2)
+                .attr("stroke-linecap", "round")
+
+            let yz_paths = YZ.append("g")
+                .attr("transform", "translate(-130,-50)")
+                .selectAll("path").data(transform_entries).enter()
+                .append("path")
+                .attr("d", function(d) {
+                    let makePath = d3.line()
+                        .x(m => xscale_inset(m))
+                        .y((m,i) => yscale_inset(d.y[i]))
+                    return makePath(d.z)
+                })
+                .attr("fill", d => "none")
+                .attr("stroke", d => (d.point == 0 ? d.stroke : "none"))
+                .attr("stroke-width", 2)
+                .attr("stroke-linecap", "round")
 
             function slidermoved(event) {
                 let point = Math.round(event)
-                paths
+                xy_paths
+                    .style("stroke", (d) => d.point === point ? d.stroke : "none")
+                    .filter((d) => d.point === point).raise()
+                xz_paths
+                    .style("stroke", (d) => d.point === point ? d.stroke : "none")
+                    .filter((d) => d.point === point).raise()
+                yz_paths
                     .style("stroke", (d) => d.point === point ? d.stroke : "none")
                     .filter((d) => d.point === point).raise()
             }

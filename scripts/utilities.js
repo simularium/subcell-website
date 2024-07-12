@@ -130,3 +130,29 @@ function makeLabel(simulator, velocity, repeat) {
         return `<text y="0" font-weight="bold">${simulator.toUpperCase()}</text><text y="10" font-size="80%">Velocity = ${velocity}</text><text y="18" font-size="80%">Replicate = ${repeat}</text>`
     }
 }
+
+function createInset(g, width, height, a, b) {
+    g.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill", "none")
+        .attr('stroke', '#555')
+        .attr("stroke-dasharray", "1,2")
+        .attr("stroke-width", 0.5)
+    g.append("path")
+        .attr("d", `m 0,${height} l 0,-15  m 0,15 l 15,0`)
+        .attr("fill", "none")
+        .attr('stroke', '#fff')
+    g.append("text")
+        .attr("x", 0)
+        .attr("y", height - 20)
+        .attr("fill", "#fff")
+        .attr("text-anchor", "middle")
+        .text(b)
+    g.append("text")
+        .attr("x", 21)
+        .attr("y", height + 4)
+        .attr("fill", "#fff")
+        .attr("text-anchor", "middle")
+        .text(a)
+}
