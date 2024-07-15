@@ -225,13 +225,16 @@ td img {
     align-items: flex-start;
 }
 
-.iframe {
-    margin-bottom: 10px;
+.responsive-iframe {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background: #666;
 }
 
-.placeholder-16-9 {
-    aspect-ratio: 16 / 9;
-    background-color: #666;
+.iframe {
+    margin-bottom: 10px;
+    position: relative;
 }
 
 .iframe iframe {
@@ -240,6 +243,11 @@ td img {
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+.placeholder-16-9 {
+    aspect-ratio: 16 / 9;
+    background-color: #666;
 }
 
 

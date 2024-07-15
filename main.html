@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <script type="text/javascript" src="scripts/figures.js"></script>
+    <script type="text/javascript" src="scripts/utilities.js"></script>
+    <link rel="stylesheet" href="style/style2.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@200;400;600&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <main>
+        <section id="header">
+            <h1>Simulating Actin Compression</h1>
+            <h2>
+                Comparing simulations of actin filament bending and twisting reveals tradeoff between
+                computational cost and capturing detailed behaviors
+            </h2>
+            <p class="todo">
+                [TODO: add authors and link to paper]
+            </p>
+        </section>
+
+        <section id="content">
+            <div>
+                <div class="responsive-iframe">
+                    <div class="iframe">
+                        <div class="placeholder-16-9"></div>
+                        <iframe
+                            src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/actin_compression_cytosim_readdy.simularium&t=200" 
+                            frameborder="0" allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+                <p>
+                    3D Visualization of compressed actin filaments simulated in ReaDDy [<a class="reference" href="#schoneberg_2013_readdy">1</a>]
+                    and Cytosim [<a class="reference" href="#nedelec_2007_collective">2</a>].
+                    Filaments are aligned at the final time step of the simulation.
+                    <span class="monomer-scale">ReaDDy filaments</span> show notable directional biphasic out-of-plane behavior,
+                    indicative of filament twist only captured with monomer-scale resolution.
+                    <span class="fiber-scale">Cytosim filaments</span> showed very little out-of-plane behavior,
+                    and when they did, it was just as likely to be in either direction.
+                </p>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
+                    <h3>
+                        The dynamic bending and twisting of actin filaments mechanically drive many processes in cells.
+                    </h3>
+                    <p>
+                        Fundamental cellular processes such as endocytosis, cell motility, and cytokinesis are reliant on a cell's ability
+                        to produce force. The actin cytoskeleton plays a central role in force production in these processes.
+                    </p>
+                    <p>
+                        The helical structure of actin filaments results in the coupling of filament twisting and bending,
+                        which impacts the structure of the actin network in 3D space.
+                        This has implications for actin's function in force production and maintainance of subcellular structures.
+                    </p>
+                    <p class="todo">
+                        [TODO: more images and videos?]
+                    </p>
+                </div>
+                <div class="right">
+                    <p class="caption">
+                        Diagram illustrating the role of actin filament bending and twisting in endocytosis.
+                    </p>
+                    <div class="wrap">
+                        <img width="49%" src="img/actin_comparison_figure_a_diagram.png" />
+                        <img width="49%" src="img/actin_comparison_figure_a_diagram.png" />
+                        <img width="20%" src="img/actin_comparison_figure_a_diagram.png" />
+                        <img width="30%" src="img/actin_comparison_figure_a_diagram.png" />
+                        <img width="40%" src="img/actin_comparison_figure_a_diagram.png" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="chunk">
+                <div class="left">
+                    <h3>
+                        We developed two models of actin to compare twisting and bending at different spatiotemporal scales.
+                    </h3>
+                    <p>
+                        Many different simulation methods have been developed to model actin.
+                        Each simulation method has limitations depending on the spatial scale.
+                    </p>
+                    <p>
+                        ReaDDy Actin filaments are composed of particles, one for each actin monomer, which are held together by potentials.
+                    </p>
+                    <p>
+                        Cytosim actin filaments are represented by control points that define a mathematical line, which is acted upon by physical forces.
+                    </p>
+                </div>
+                <div class="right">
+                    <p class="caption">
+                        Diagram of actin filaments modeled at monomer-scale, in which the interactions of each monomer of the filament with its neighbors is explicitly simulated, and fiber-scale, in which the filament is modeled as a series of points connected by simple length and angle-limited springs that have no rotational constraints.
+                    </p>
+                    <div class="centered">
+                        <img src="img/actin_comparison_figure_b.svg" width="80%" />
+                    </div>
+                    <div class="wrap" style="flex-wrap: nowrap;">
+                        <div class="iframe" style="width:49%;">
+                            <div class="placeholder-16-9"></div>
+                            <iframe frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <div class="iframe" style="width:49%;">
+                            <div class="placeholder-16-9"></div>
+                            <iframe frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <p class="todo">
+                        [TODO: prevent popup messages, remove filename title, remove camera buttons, better initial camera view]
+                    </p>
+                    <p class="todo">
+                        [TODO: add a few more details about methods including links to repos]
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="footer">
+            <p id="schoneberg_2013_readdy">[1] Schöneberg J and Noé F. ReaDDy-a software for particle-based reaction-diffusion dynamics in crowded cellular environments. <em>PloS ONE</em>, <strong>8</strong>(9):e74261, 2013.</p>
+            <p id="nedelec_2007_collective">[2] Nedelec F and Foethke D. Collective Langevin dynamics of flexible cytoskeletal fibers. <em>New Journal of Physics</em>, <strong>9</strong>(11):427, 2007.</p>
+        </section>
+    </main>
+</body>
+
+</html>
