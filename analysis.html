@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/d3-simple-slider"></script>
     <script type="text/javascript" src="scripts/figures.js"></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>
-    <link rel="stylesheet" href="style/style2.css">
+    <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@200;400;600&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -105,83 +105,6 @@
             <div class="chunk">
                 <div class="left">
                     <h3>
-                        X
-                    </h3>
-                    <p>
-                        X
-                    </p>
-
-                    <p class="instructions">
-                        X
-                    </p>
-                </div>
-                <div class="right">
-                    <p class="caption">
-                        x
-                    </p>
-                    <div class="inputs" id="velocity">
-                        <h4>Compression velocity</h4>
-                        <label class="container">
-                            <input type="radio" name="velocity" id="velocity_0047" onclick="generate_compression_metrics()" checked />
-                            4.7 &#181;m/s
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="velocity" id="velocity_0150" onclick="generate_compression_metrics()" />
-                            15 &#181;m/s
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="velocity" id="velocity_0470" onclick="generate_compression_metrics()" />
-                            47 &#181;m/s
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="velocity" id="velocity_1500" onclick="generate_compression_metrics()" />
-                            150 &#181;m/s
-                            <span class="input radio"></span>
-                        </label>
-                    </div>
-                    <div class="inputs" id="metric">
-                        <h4>Compression metric</h4>
-                        <label class="container">
-                            <input type="radio" name="metric" id="metric_peak_asymmetry" onclick="generate_compression_metrics()" checked />
-                            Peak asymmetry
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="metric" id="metric_non_coplanarity" onclick="generate_compression_metrics()" />
-                            Non-coplanarity
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="metric" id="metric_compression_ratio" onclick="generate_compression_metrics()" />
-                            Compression ratio
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="metric" id="metric_average_perp_distance" onclick="generate_compression_metrics()" />
-                            Average perpendicular distance
-                            <span class="input radio"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" name="metric" id="metric_contour_length" onclick="generate_compression_metrics()" />
-                            Contour length
-                            <span class="input radio"></span>
-                        </label>
-                    </div>
-                    <div class="centered">
-                        <div id="compression_metrics"></div>
-                    </div>
-                    <script>
-                        generate_compression_metrics()
-                    </script>
-                </div>
-            </div>
-
-            <div class="chunk">
-                <div class="left">
-                    <h3>
                         Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity.
                     </h3>
                     <p>
@@ -263,10 +186,33 @@
                         <div id="pca_transform_slider"></div>
                     </div>
                     <script>generate_pca_transform()</script>
+
+                    <div class="wrap" style="flex-wrap: nowrap;">
+                        <div class="iframe" style="width:49%;">
+                            <div class="placeholder-16-9"></div> 
+                            <iframe
+                                src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/actin_compression_pca/actin_compression_pca_time_pc1.simularium" 
+                                frameborder="0" allowfullscreen>
+                            </iframe>
+                        </div>
+                        <div class="iframe" style="width:49%;">
+                            <div class="placeholder-16-9"></div>
+                            <iframe
+                                src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/actin_compression_pca/actin_compression_pca_time_pc2.simularium" 
+                                frameborder="0" allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
 
         </section>
+
+        <div class="center-container">
+            <div class="center">
+                <a href="index.html"><button class="back_btn" type="button">Back to Intro</button></a>
+            </div>
+        </div>
 
         <section id="footer">
             <p id="schoneberg_2013_readdy">[1] Schöneberg J and Noé F. ReaDDy-a software for particle-based reaction-diffusion dynamics in crowded cellular environments. <em>PloS ONE</em>, <strong>8</strong>(9):e74261, 2013.</p>
