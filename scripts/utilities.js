@@ -156,3 +156,24 @@ function createInset(g, width, height, a, b) {
         .attr("text-anchor", "middle")
         .text(a)
 }
+
+function individualVizLink(simulator, velocity, replicate) {
+    let base_link = `https://simularium.allencell.org/viewer?trajUrl=https://${simulator.toLowerCase()}-working-bucket.s3.us-west-2.amazonaws.com`
+    let series = (velocity === "0000") ? "NO_COMPRESSION" : "COMPRESSION_VELOCITY"
+    if (simulator.toLowerCase() == "readdy") {
+        series = `ACTIN_${series}`
+    }
+    let velocity_name = (velocity === "0000") ? "" : "_" + velocity
+    let replicate_name = "00000" + (Number(replicate) + 1)
+    return `${base_link}/${series}/viz/${series}${velocity_name}_${replicate_name}.simularium`
+}
+
+function formatVelocity(velocity) {
+    let v = velocity.toString()
+    v = v.includes(".") ? "0" + v.replace(".", "") : v + "0"
+    while (v.length < 4)
+    {
+        v = "0" + v
+    }
+    return v
+}

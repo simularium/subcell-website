@@ -1,19 +1,8 @@
-function individual_viz_link(simulator, velocity, replicate_name) {
-    let base_link = `https://simularium.allencell.org/viewer?trajUrl=https://${simulator}-working-bucket.s3.us-west-2.amazonaws.com`
-    let series = (velocity == "0000") ? "NO_COMPRESSION" : "COMPRESSION_VELOCITY"
-    if (simulator == "readdy") {
-        series = `ACTIN_${series}`
-    }
-    let velocity_name = (velocity == "0000") ? "" : "_" + velocity
-    return `${base_link}/${series}/viz/${series}${velocity_name}_${replicate_name}.simularium`
-}
-
 function generate_filaments_table() {
     const ID = "filaments_table"
 
     // Get selected replicate.
     let replicate = document.querySelector("input[name=replicate]:checked").id.replace("replicate_", "")
-    let replicate_name = "00000" + (Number(replicate) + 1)
 
     let velocities = ["0000", "0047", "0150", "0470", "1500"]
 
@@ -22,7 +11,7 @@ function generate_filaments_table() {
         .html(null)
         .append("a")
         .attr("target", "_blank")
-        .attr("href", individual_viz_link("readdy", velocity, replicate_name))
+        .attr("href", individualVizLink("readdy", velocity, replicate))
         .append("img")
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 
@@ -31,7 +20,7 @@ function generate_filaments_table() {
         .html(null)
         .append("a")
         .attr("target", "_blank")
-        .attr("href", individual_viz_link("cytosim", velocity, replicate_name))
+        .attr("href", individualVizLink("cytosim", velocity, replicate))
         .append("img")
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 }
@@ -195,6 +184,7 @@ function generate_compression_metrics() {
                     "y": entry["y"],
                     "stroke": shadeColor(COLORS[simulator], percent),
                     "label": makeLabel(simulator, null, repeat),
+                    "link": individualVizLink(simulator, velocity, repeat),
                 }
             })
 
@@ -223,6 +213,7 @@ function generate_compression_metrics() {
             SVG
                 .on("pointerenter", pointerentered)
                 .on("pointermove", pointermoved)
+                .on("pointerdown", pointerdown)
                 .on("pointerleave", pointerleft)
                 .on("touchstart", event => event.preventDefault())
 
@@ -250,6 +241,15 @@ function generate_compression_metrics() {
                 text
                     .attr("transform", `translate(${x},${y - 24})`)
                     .html(k["label"])
+            }
+
+            function pointerdown(event) {
+                const [xm, ym] = d3.pointer(event)
+
+                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm + MARGIN.left, e[1] - ym + MARGIN.top))
+                const [x, y, k] = points[i]
+
+                window.open(k["link"], '_blank').focus();
             }
 
             function pointerentered() {
@@ -394,6 +394,7 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
                     "y": entry["y"],
                     "stroke": shadeColor(COLORS[entry["simulator"]], percent),
                     "label": makeLabel(entry["simulator"], entry["velocity"], entry["replicate"]),
+                    "link": individualVizLink(entry["simulator"], formatVelocity(entry["velocity"]), entry["replicate"]),
                 }
             })
 
@@ -454,6 +455,7 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
             SVG
                 .on("pointerenter", pointerentered)
                 .on("pointermove", pointermoved)
+                .on("pointerdown", pointerdown)
                 .on("pointerleave", pointerleft)
                 .on("touchstart", event => event.preventDefault())
                 .on("click", click)
@@ -509,6 +511,14 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
                 text
                     .attr("transform", `translate(${x},${y - 24})`)
                     .html(k["label"])
+            }
+            function pointerdown(event) {
+                const [xm, ym] = d3.pointer(event)
+
+                const i = d3.leastIndex(points, e => Math.hypot(e[0] - xm + MARGIN.left, e[1] - ym + MARGIN.top))
+                const [x, y, k] = points[i]
+
+                window.open(k["link"], '_blank').focus();
             }
 
             function pointerentered() {
