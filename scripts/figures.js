@@ -1,8 +1,19 @@
+function individual_viz_link(simulator, velocity, replicate_name) {
+    let base_link = `https://simularium.allencell.org/viewer?trajUrl=https://${simulator}-working-bucket.s3.us-west-2.amazonaws.com`
+    let series = (velocity == "0000") ? "NO_COMPRESSION" : "COMPRESSION_VELOCITY"
+    if (simulator == "readdy") {
+        series = `ACTIN_${series}`
+    }
+    let velocity_name = (velocity == "0000") ? "" : "_" + velocity
+    return `${base_link}/${series}/viz/${series}${velocity_name}_${replicate_name}.simularium`
+}
+
 function generate_filaments_table() {
     const ID = "filaments_table"
 
     // Get selected replicate.
     let replicate = document.querySelector("input[name=replicate]:checked").id.replace("replicate_", "")
+    let replicate_name = "00000" + (Number(replicate) + 1)
 
     let velocities = ["0000", "0047", "0150", "0470", "1500"]
 
@@ -11,7 +22,7 @@ function generate_filaments_table() {
         .html(null)
         .append("a")
         .attr("target", "_blank")
-        .attr("href", "https://simularium.allencell.org/viewer?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium")
+        .attr("href", individual_viz_link("readdy", velocity, replicate_name))
         .append("img")
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 
@@ -20,7 +31,7 @@ function generate_filaments_table() {
         .html(null)
         .append("a")
         .attr("target", "_blank")
-        .attr("href", "https://simularium.allencell.org/viewer?trajUrl=https://cytosim-working-bucket.s3.us-west-2.amazonaws.com/simularium/actin_compression_velocity=4.7_0.simularium")
+        .attr("href", individual_viz_link("cytosim", velocity, replicate_name))
         .append("img")
         .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
 }
