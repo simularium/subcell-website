@@ -45,6 +45,7 @@ function generate_compression_metrics() {
     }
 
     const LABELS = {
+        "twist_angle": "Supertwist angle",
         "non_coplanarity": "Non-coplanarity",
         "peak_asymmetry": "Peak asymmetry",
         "average_perp_distance": "Average perpendicular distance",
@@ -63,6 +64,11 @@ function generate_compression_metrics() {
         "padding": 0.02,
     }
     let yaxis = {
+        "twist_angle": {
+            "bounds": [-180, 180],
+            "padding": 20,
+            "n": 5,
+        },
         "peak_asymmetry": {
             "bounds": [0, 0.4],
             "padding": 0.02,
@@ -558,6 +564,8 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
         "#573b88",
     ]
 
+    const COLORMAP_DIVERGING = COLORMAP.slice(1).reverse().concat(COLORMAP)
+
     // Set colormap.
     let colormap = null
 
@@ -577,6 +585,10 @@ function generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale,
         colormap = d3.scaleLinear()
             .range(COLORMAP)
             .domain(linspace(0, 0.01, COLORMAP.length))
+    } else if (feature == "twist_angle") {
+        colormap = d3.scaleLinear()
+            .range(COLORMAP_DIVERGING)
+            .domain(linspace(-90, 90, COLORMAP_DIVERGING.length))
     }
 
     // Clear contents.
