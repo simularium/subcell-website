@@ -155,7 +155,7 @@ td img {
 
 .instructions {
     color: #d092ff;
-    font-weight: 400;
+    font-weight: 200;
 }
 
 .todo {
@@ -179,6 +179,11 @@ td img {
 .reference {
     color: #d092ff;
     text-decoration: none;
+    font-weight: 400;
+}
+
+.reference:hover {
+    color: #dab0fa;
 }
 
 .centered {
@@ -271,7 +276,7 @@ td img {
     max-width: 750px;
 }
 
-.back_btn {
+.nav_btn {
     background-color: #1e1b25;
     border: 1px solid #d092ff;
     border-radius: 10px;
@@ -282,4 +287,23 @@ td img {
     display: inline-block;
     margin-top: 0px;
     cursor: pointer;
+}
+
+.nav_btn:hover {
+    border: 1px solid #dab0fa;
+    color: #dab0fa;
+}
+
+.spacer {
+    height: 100px;
+}
+
+.code_links a {
+    color: #d092ff;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.code_links a:hover {
+    color: #dab0fa;
 }
