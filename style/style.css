@@ -307,3 +307,10 @@ td img {
 .code_links a:hover {
     color: #dab0fa;
 }
+.zoom img {
+    transition: transform 0.3s ease-in-out;
+}
+
+.zoom img:hover {
+    transform: scale(1.2);
+}
