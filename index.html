@@ -8,12 +8,13 @@
     <script src="https://unpkg.com/d3-simple-slider"></script>
     <script type="text/javascript" src="scripts/figures.js"></script>
     <script type="text/javascript" src="scripts/utilities.js"></script>
+    <script type="text/javascript" src="scripts/slideshow.js"></script>
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overpass:wght@200;400;600&display=swap">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<body>
+<body onload="showSlides(0)">
     <main>
         <section id="header">
             <a id="top"></a>
@@ -94,17 +95,31 @@
                     </p>
                 </div>
                 <div class="right">
-                    <p class="caption">
-                        Examples of actin filament bending and twisting in varied cellular processes. References [<a class="reference" href="#placeholder1">3-6</a>]
-                    </p>
-                    <div class="wrap">
-                        <img width="40%" src="img/reynolds2022bending_fig3A.png" />
-                        <!-- <img width="40%" src="img/jasnin2013threedimensional_figS4G.png" /> -->
-                        <img width="36%" src="img/jasnin2013threedimensional_figS4G_jasnin2022elasticity_fig1C.png" />
-                        <!-- <img width="40%" src="img/jasnin2022elasticity_fig1C.png" /> -->
-                        <img width="32%" src="img/serwas2022mechanistic_fig2B.png" />
-                        <img width="40%" src="img/actin_comparison_figure_a_diagram.png" />
-                        <!-- <img width="49%" src="img/bibeau2023twist_fig2A.png" /> -->
+                    <div class="slideshow">
+                        <div class="slide fullfade">
+                            <img src="img/cytosim_0000_000001.png" style="width:100%" />
+                            <p>Caption here for image.</p>
+                        </div>
+                        <div class="slide fullfade">
+                            <img src="img/readdy_0047_000001.png" style="width:100%" />
+                            <p>Caption here for image.</p>
+                        </div>
+                        <div class="slide fullfade">
+                            <img src="img/cytosim_0047_000001.png" style="width:100%" />
+                            <p>Caption here for image.</p>
+                        </div>
+                        <div class="slide fullfade">
+                            <img src="img/cytosim_0047_000001.png" style="width:100%" />
+                            <p>Caption here for image.</p>
+                        </div>
+                        <a class="prev" onclick="prevSlide()">&#10094;</a>
+                        <a class="next" onclick="nextSlide()">&#10095;</a>
+                    </div>
+                    <div style="text-align:center">
+                        <div class="dot" onclick="showSlides(0, false)"></div>
+                        <div class="dot" onclick="showSlides(1, false)"></div>
+                        <div class="dot" onclick="showSlides(2, false)"></div>
+                        <div class="dot" onclick="showSlides(3, false)"></div>
                     </div>
                 </div>
             </div>
