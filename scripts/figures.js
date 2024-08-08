@@ -11,18 +11,20 @@ function generate_filaments_table() {
         .html(null)
         .append("a")
         .attr("target", "_blank")
+        .attr("class", "zoom")
         .attr("href", individualVizLink("readdy", velocity, replicate))
         .append("img")
-        .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
+        .attr("src", `img/readdy_${velocity}_00000${Number(replicate) + 1}.png`))
 
     // Update links and images for fiber-scale simulations.
     velocities.forEach(velocity => d3.select(`#${ID}_fiber_${velocity}`)
         .html(null)
         .append("a")
         .attr("target", "_blank")
+        .attr("class", "zoom")
         .attr("href", individualVizLink("cytosim", velocity, replicate))
         .append("img")
-        .attr("src", `img/actin_compression_matrix_placeholder_replicate_${replicate}.jpg`))
+        .attr("src", `img/cytosim_${velocity}_00000${Number(replicate) + 1}.png`))
 }
 
 function generate_compression_metrics() {

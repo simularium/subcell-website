@@ -16,13 +16,32 @@
 <body>
     <main>
         <section id="header">
+            <a id="top"></a>
             <h1>Simulating Actin Compression</h1>
             <h2>
                 Comparing simulations of actin filament bending and twisting reveals tradeoff between
                 computational cost and capturing detailed behaviors
             </h2>
+            <h4>
+                Blair Lyons<sup>1, *</sup>,
+                Saurabh S. Mogre<sup>1, *</sup>,
+                Karthik Vegesna<sup>1, *</sup>,
+                Jessica S. Yu<sup>1, *</sup>,
+                Mark Hansen<sup>2</sup>,
+                Aadarsh Raghunathan<sup>2</sup>,
+                Graham T. Johnson<sup>1, §</sup>,
+                Eran Agmon<sup>3, §</sup>,
+                Matthew Akamatsu<sup>2, §</sup><br/>
+            </h4>
+            <p>
+                <sup>1</sup>Allen Institute for Cell Science, Seattle, WA, USA<br/>
+                <sup>2</sup>Department of Biology, University of Washington, Seattle, WA, USA<br/>
+                <sup>3</sup>Center for Cell Analysis and Modeling, University of Connecticut School of Medicine, Farmington, CT, USA<br/>
+                <sup>*</sup>Authors have equal contribution<br/>
+                <sup>§</sup>Corresponding authors
+            </p>
             <p class="todo">
-                [TODO: add authors and link to paper]
+                [TODO: add link to paper]
             </p>
         </section>
 
@@ -32,14 +51,14 @@
                     <div class="iframe">
                         <div class="placeholder-16-9"></div>
                         <iframe
-                            src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/actin_compression_cytosim_readdy_0.simularium&t=200" 
+                            src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/actin_compression_cytosim_readdy_0.simularium&t=200"
                             frameborder="0" allowfullscreen>
                         </iframe>
                     </div>
                 </div>
                 <p>
-                    3D Visualization of compressed actin filaments simulated in ReaDDy [<a class="reference" href="#schoneberg_2013_readdy">1</a>]
-                    and Cytosim [<a class="reference" href="#nedelec_2007_collective">2</a>].
+                    3D Visualization of compressed actin filaments simulated in ReaDDy <sup><a class="reference" href="#schoneberg_2013_readdy">1</a></sup>
+                    and Cytosim <sup><a class="reference" href="#nedelec_2007_collective">2</a></sup>.
                     Filaments are aligned at the final time step of the simulation.
                     <span class="monomer-scale">ReaDDy filaments</span> show notable directional biphasic out-of-plane behavior,
                     indicative of filament twist only captured with monomer-scale resolution.
@@ -47,6 +66,14 @@
                     and when they did, it was just as likely to be in either direction.
                 </p>
             </div>
+
+            <div class="center-container">
+                <div class="center">
+                    <a href="#more"><button class="nav_btn" type="button">More &#9660;</button></a>
+                </div>
+            </div>
+
+            <div class="spacer"><a id="more"></a></div>
 
             <div class="chunk">
                 <div class="left">
@@ -82,8 +109,10 @@
                 </div>
             </div>
 
+            <div class="spacer"></div>
+
             <div class="chunk">
-                <div class="left">
+                <div class="left, code_links">
                     <h3>
                         We developed two models of actin to compare twisting and bending at different spatiotemporal scales.
                     </h3>
@@ -93,12 +122,19 @@
                     </p>
                     <p>
                         ReaDDy Actin filaments are composed of particles, one for each actin monomer, which are held together by potentials.
+                        (<a href="https://github.com/simularium/readdy-models" target="_blank">ReaDDy actin model code</a>).
                     </p>
                     <p>
                         Cytosim actin filaments are represented by control points that define a mathematical line, which is acted upon by physical forces.
+                        (<a href="https://github.com/simularium/Cytosim" target="_blank">our Cytosim code version</a>).
+                    </p>
+                    <p>
+                        Our simulation, analysis, and visualization pipeline code is available
+                        <a href="https://github.com/simularium/subcell-pipeline" target="_blank">here</a> and simulation data is available
+                        <a href="" target="_blank">here</a>.
                     </p>
                     <p class="todo">
-                        [TODO: add a few more details about methods including links to repos]
+                        [TODO: add link to  simulation data]
                     </p>
                 </div>
                 <div class="right">
@@ -108,24 +144,10 @@
                     <div class="centered">
                         <img src="img/actin_comparison_figure_b.svg" width="80%" />
                     </div>
-                    <div class="wrap" style="flex-wrap: nowrap;">
-                        <div class="iframe" style="width:49%;">
-                            <div class="placeholder-16-9"></div> 
-                            <iframe
-                                src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/readdy_model_detail.simularium" 
-                                frameborder="0" allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="iframe" style="width:49%;">
-                            <div class="placeholder-16-9"></div>
-                            <iframe
-                                src="https://simularium.allencell.org/embed?trajUrl=https://subcell-working-bucket.s3.us-west-2.amazonaws.com/cytosim_model_detail.simularium" 
-                                frameborder="0" allowfullscreen>
-                            </iframe>
-                        </div>
-                    </div>
                 </div>
             </div>
+
+            <div class="spacer"></div>
 
             <div class="chunk">
                 <div class="left">
@@ -138,9 +160,6 @@
                     </p>
                     <p class="instructions">
                         Use the matrix to explore results from different simulators at different compression velocities.
-                    </p>
-                    <p class="todo">
-                        [TODO: take screenshots for each condition]
                     </p>
                 </div>
                 <div class="right">
@@ -205,15 +224,167 @@
                 </div>
             </div>
 
-        </section>
+            <div class="spacer"></div>
 
-        <div class="center-container">
-            <div class="center">
-                <!-- <a href="analysis.html"><button class="back_btn" type="button"><strong></strong> --- Continue to analysis --- </strong></button></a> -->
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<a href="analysis.html"><button class="back_btn" type="button"><i class="fa fa-arrow-right"></i> Continue to analysis</button></a>
+            <div class="chunk">
+                <div class="left">
+                    <h3>
+                        Our quantitative analysis revealed a divergence particularly in terms of non-coplanarity.
+                    </h3>
+                    <p>
+                        ReaDDy actin filaments showed high non-coplanarity in one direction, especially in filaments simulated at higher compression velocities.
+                        Cytosim filaments showed very little out-of-plane behavior at any compression velocities, and when they did, it was just as likely to be in either direction.
+                    </p>
+                    <p class="instructions">
+                        Explore trajectories by metrics and in PC space using the interactive plots.
+                    </p>
+                </div>
+                <div class="right">
+                    <p class="caption">
+                        Trajectories of filaments in PC space for each simulator, velocity, and replicate. The start or end of each trajectory is marked by a diamond or circle, respectively.
+                    </p>
+                    <div class="inputs" id="feature">
+                        <h4>Feature</h4>
+                        <label class="container">
+                            <input type="radio" name="feature" id="feature_simulator" onclick="generate_pca_trajectories_or_features()" checked />
+                            Simulator trajectories
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="feature" id="feature_compression_ratio" onclick="generate_pca_trajectories_or_features()" />
+                            Compression ratio
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="feature" id="feature_velocity" onclick="generate_pca_trajectories_or_features()" />
+                            Compression velocity
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="feature" id="feature_peak_asymmetry" onclick="generate_pca_trajectories_or_features()" />
+                            Peak asymmetry
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="feature" id="feature_non_coplanarity" onclick="generate_pca_trajectories_or_features()" />
+                            Non-coplanarity
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="centered">
+                        <div id="pca_trajectories_or_features"></div>
+                    </div>
+                    <script>generate_pca_trajectories_or_features()</script>
+
+                    <p class="caption">
+                        Metrics for each trajectory over time for each simulator, velocity, and replicate.
+                    </p>
+                    <div class="inputs" id="velocity">
+                        <h4>Compression velocity</h4>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_0047" onclick="generate_compression_metrics()" checked />
+                            4.7 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_0150" onclick="generate_compression_metrics()" />
+                            15 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_0470" onclick="generate_compression_metrics()" />
+                            47 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="velocity" id="velocity_1500" onclick="generate_compression_metrics()" />
+                            150 &#181;m/s
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="inputs" id="metric">
+                        <h4>Compression metric</h4>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_peak_asymmetry" onclick="generate_compression_metrics()" checked />
+                            Peak asymmetry
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_non_coplanarity" onclick="generate_compression_metrics()" />
+                            Non-coplanarity
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_compression_ratio" onclick="generate_compression_metrics()" />
+                            Compression ratio
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_average_perp_distance" onclick="generate_compression_metrics()" />
+                            Average perpendicular distance
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="metric" id="metric_contour_length" onclick="generate_compression_metrics()" />
+                            Contour length
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="centered">
+                        <div id="compression_metrics"></div>
+                    </div>
+                    <script>
+                        generate_compression_metrics()
+                    </script>
+                </div>
             </div>
-        </div>
+
+            <div class="spacer"></div>
+
+            <div class="chunk">
+                <div class="left">
+                    <h3>
+                        Monomer-scale simulations captured characteristics of helical structure more effectively than fiber-scale simulations.
+                    </h3>
+                    <p>
+                        Inverse PCA transforms of the filament shapes confirmed that PC1 captured filament compression and peak asymmetry, while PC2 scaled with filament non-coplanarity and twist. Inverse transforms also revealed that low values of PC2 correspond to twist in the opposite direction. Some Cytosim simulations show this behavior, likely because directional helicity is not enforced in Cytosim.
+                    </p>
+                    <p class="instructions">
+                        Use the slider to explore inverse transforms for values of each PC.
+                    </p>
+                </div>
+                <div class="right">
+                    <p class="caption">
+                        Latent walks for filament shape along PC 1 and PC 2.
+                    </p>
+                    <div class="inputs" id="component">
+                        <h4>Principal component</h4>
+                        <label class="container">
+                            <input type="radio" name="component" id="component_PCA1" onclick="generate_pca_transform()" checked />PC 1
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="component" id="component_PCA2" onclick="generate_pca_transform()" />PC 2
+                            <span class="input radio"></span>
+                        </label>
+                    </div>
+                    <div class="centered">
+                        <div id="pca_transform"></div>
+                        <div id="pca_transform_slider"></div>
+                    </div>
+                    <script>generate_pca_transform()</script>
+                </div>
+            </div>
+
+            <div class="spacer"></div>
+
+            <div class="center-container">
+                <div class="center">
+                    <a href="#top"><button class="nav_btn" type="button">Back to Top &#9650;</button></a>
+                </div>
+            </div>
+
+        </section>
 
         <section id="footer">
             <p id="schoneberg_2013_readdy">[1] Schöneberg J and Noé F. ReaDDy-a software for particle-based reaction-diffusion dynamics in crowded cellular environments. <em>PloS ONE</em>, <strong>8</strong>(9):e74261, 2013.</p>
