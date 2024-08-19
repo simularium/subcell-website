@@ -314,3 +314,90 @@ td img {
 .zoom img:hover {
     transform: scale(1.2);
 }
+
+.slideshow {
+    position: relative;
+    height: 400px;
+}
+
+.slide {
+    display: none;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0,0,0,0.8);
+}
+
+.slide p {
+    color: white;
+    font-size: 80%;
+    position: absolute;
+    width: calc(100% - 40px);
+    bottom: 8px;
+    background-color: rgb(30, 27, 37, 0.8);
+    padding: 20px;
+}
+
+.slide img {
+    max-width: 100%;
+    max-height: 400px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    margin-top: -30px;
+    padding: 16px;
+    color: rgb(211, 211, 211, 0.2);
+    font-weight: bold;
+    font-size: 200%;
+    transition: 0.6s ease;
+    user-select: none;
+}
+
+.next {
+    right: 0;
+}
+
+.prev:hover, .next:hover {
+    color: #d3d3d3;
+}
+
+.dot {
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    margin: 5px;
+    background-color: rgb(211, 211, 211, 0.1);
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+
+.active, .dot:hover {
+    background-color: #d3d3d3;
+}
+
+.fullfade {
+    opacity: 1;
+    animation: fullfade 5s ease-in-out;
+}
+
+.fadein {
+    opacity: 1;
+    animation: fadein 5s ease-in-out;
+}
+
+@keyframes fullfade {
+    0%,100% { opacity: 0 }
+    10%,90% { opacity: 1 }
+}
+
+@keyframes fadein {
+    0% { opacity: 0 }
+    10%{ opacity: 1 }
+}
