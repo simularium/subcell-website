@@ -764,18 +764,18 @@ function generate_pca_transform() {
         .domain(linspace(xaxis.bounds[0] - xaxis.padding, xaxis.bounds[1] + xaxis.padding, COLORMAP.length))
 
     let INSET_SIZE = 350
-    let padding = 10
+    let padding = 20
     let hscale = 0.4
     let vscale = 0.25
     let lscale = 0.25
     let offset = (width - ((1 + vscale) * INSET_SIZE) - padding) / 2
     let INSETS = G.append("g").attr("transform", `translate(${offset},0)`)
     let XY = INSETS.append("g").attr("transform", `translate(${vscale * INSET_SIZE + padding},0)`)
-    createInset(XY, INSET_SIZE, hscale * INSET_SIZE, "X", "Y")
+    createInset(XY, INSET_SIZE, hscale * INSET_SIZE, "X", "Y", false)
     let XZ = INSETS.append("g").attr("transform", `translate(${vscale * INSET_SIZE + padding},${hscale * INSET_SIZE + padding})`)
-    createInset(XZ, INSET_SIZE, lscale * INSET_SIZE, "X", "Z")
+    createInset(XZ, INSET_SIZE, lscale * INSET_SIZE, "X", "Z", true)
     let YZ = INSETS.append("g").attr("transform", `translate(0,0)`)
-    createInset(YZ, vscale * INSET_SIZE, hscale * INSET_SIZE, "Y", "Z")
+    createInset(YZ, vscale * INSET_SIZE, hscale * INSET_SIZE, "Z", "Y", false)
 
     Promise.all([
         d3.csv("data/actin_compression_pca_results.csv"),
@@ -886,7 +886,7 @@ function generate_pca_transform() {
                 .attr("d", function(d) {
                     let makePath = d3.line()
                         .x(m => xscale_inset(m))
-                        .y((m,i) => yscale_inset(d.z[i]))
+                        .y((m,i) => yscale_inset(-d.z[i]))
                     return makePath(d.x)
                 })
                 .attr("fill", d => "none")
