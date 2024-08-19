@@ -259,13 +259,18 @@
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="feature" id="feature_peak_asymmetry" onclick="generate_pca_trajectories_or_features()" />
-                            Peak asymmetry
+                            <input type="radio" name="feature" id="feature_twist_angle" onclick="generate_pca_trajectories_or_features()" />
+                            Supertwist angle
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
                             <input type="radio" name="feature" id="feature_non_coplanarity" onclick="generate_pca_trajectories_or_features()" />
                             Non-coplanarity
+                            <span class="input radio"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" name="feature" id="feature_peak_asymmetry" onclick="generate_pca_trajectories_or_features()" />
+                            Peak asymmetry
                             <span class="input radio"></span>
                         </label>
                     </div>
@@ -303,8 +308,8 @@
                     <div class="inputs" id="metric">
                         <h4>Compression metric</h4>
                         <label class="container">
-                            <input type="radio" name="metric" id="metric_peak_asymmetry" onclick="generate_compression_metrics()" checked />
-                            Peak asymmetry
+                            <input type="radio" name="metric" id="metric_twist_angle" onclick="generate_compression_metrics()" checked />
+                            Supertwist angle
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
@@ -318,8 +323,8 @@
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
-                            <input type="radio" name="metric" id="metric_average_perp_distance" onclick="generate_compression_metrics()" />
-                            Average perpendicular distance
+                            <input type="radio" name="metric" id="metric_peak_asymmetry" onclick="generate_compression_metrics()" checked />
+                            Peak asymmetry
                             <span class="input radio"></span>
                         </label>
                         <label class="container">
