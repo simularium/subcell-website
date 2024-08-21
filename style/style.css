@@ -66,6 +66,11 @@ td img {
     width: 80px;
 }
 
+a {
+    color: #d3d3d3;
+    font-weight: bold;
+}
+
 .inputs {
     padding: 0 0 5px 0;
     display: block;
