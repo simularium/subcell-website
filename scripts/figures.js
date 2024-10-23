@@ -109,6 +109,7 @@ function generate_compression_metrics() {
     // Get or create SVG.
     let SVG = d3.select(`#${ID}`).select("svg")
     let G = SVG.select("g").select("#data")
+    let instruct = {}
 
     if (SVG.empty()) {
         // Create SVG.
@@ -143,6 +144,17 @@ function generate_compression_metrics() {
             .attr("fill", "white")
             .attr("x", width/2)
             .attr("y", height + 30)
+
+        // Add instructions.
+        instruct = labels.append("text")
+        instruct
+            .html('Click a trace to load its 3D visualization.')
+            .attr("font-weight", "200")
+            .attr("text-anchor", "right")
+            .attr("fill", "#d092ff")
+            .attr("x", width/2 + 10)
+            .attr("y", 15)
+            .attr("visibility", "hidden")
 
         // Add data group.
         G = G.append("g").attr("id", "data")
@@ -263,11 +275,14 @@ function generate_compression_metrics() {
             function pointerentered() {
                 trajectory_paths.style("stroke", "#47444D")
                 markers.attr("display", null)
+                SVG.style("cursor", "pointer")
+                instruct.attr("visibility", "visible")
             }
 
             function pointerleft() {
                 trajectory_paths.style("stroke", null)
                 markers.attr("display", "none")
+                instruct.attr("visibility", "hidden")
             }
         })
         .catch(error => {
@@ -312,6 +327,7 @@ function generate_pca_trajectories_or_features() {
     // Get or create SVG.
     let SVG = d3.select(`#${ID}`).select("svg")
     let G = SVG.select("g").select("#data")
+    let instruct = {}
 
     if (SVG.empty()) {
         // Create SVG.
@@ -361,6 +377,17 @@ function generate_pca_trajectories_or_features() {
             .attr("x", -30)
             .attr("y", height / 2)
 
+        // Add instructions.
+        instruct = labels.append("text")
+        instruct
+            .html('Click a trace to load its 3D visualization.')
+            .attr("font-weight", "200")
+            .attr("text-anchor", "right")
+            .attr("fill", "#d092ff")
+            .attr("x", width/2 + 10)
+            .attr("y", 15)
+            .attr("visibility", "hidden")
+
         // Add data group.
         G = G.append("g").attr("id", "data")
     }
@@ -369,13 +396,13 @@ function generate_pca_trajectories_or_features() {
     let feature = document.querySelector("input[name=feature]:checked").id.replace("feature_", "")
 
     if (feature == "simulator") {
-        generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale)
+        generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale, instruct)
     } else (
         generate_pca_feature(ID, SVG, G, MARGIN, width, height, xscale, yscale, feature)
     )
 }
 
-function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale) {
+function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, yscale, instruct) {
     const COLORS = {
         "READDY": "#ca562c",
         "CYTOSIM": "#008080",
@@ -534,6 +561,8 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
                 start_paths.style("fill", "#47444D")
                 end_circles.style("fill", "#47444D")
                 markers.attr("display", null)
+                SVG.style("cursor", "pointer")
+                instruct.attr("visibility", "visible")
             }
 
             function pointerleft() {
@@ -541,6 +570,7 @@ function generate_pca_trajectories(ID, SVG, G, MARGIN, width, height, xscale, ys
                 start_paths.style("fill", null)
                 end_circles.style("fill", null)
                 markers.attr("display", "none")
+                instruct.attr("visibility", "hidden")
             }
 
             function click(d) {
