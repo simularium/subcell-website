@@ -178,14 +178,12 @@ function createInset(g, width, height, a, b, invert) {
 }
 
 function individualVizLink(simulator, velocity, replicate) {
-    let base_link = `https://simularium.allencell.org/viewer?trajUrl=https://${simulator.toLowerCase()}-working-bucket.s3.us-west-2.amazonaws.com`
-    let series = (velocity === "0000") ? "NO_COMPRESSION" : "COMPRESSION_VELOCITY"
-    if (simulator.toLowerCase() == "readdy") {
-        series = `ACTIN_${series}`
-    }
+    let base_link = `https://simularium.allencell.org/viewer?trajUrl=https://allencell.s3.amazonaws.com/aics/subcellular_model_simulations/subcellular_model_simulations_actin_comparison`
+    let simulation = simulator.toLowerCase() == "readdy" ? `monomer_scale_readdy` : `fiber_scale_cytosim`
+    let series = (velocity === "0000") ? `ACTIN_NO_COMPRESSION` : `ACTIN_COMPRESSION_VELOCITY`
     let velocity_name = (velocity === "0000") ? "" : "_" + velocity
     let replicate_name = "00000" + (Number(replicate) + 1)
-    return `${base_link}/${series}/viz/${series}${velocity_name}_${replicate_name}.simularium`
+    return `${base_link}/${simulation}/${series}/viz/${series}${velocity_name}_${replicate_name}.simularium`
 }
 
 function formatVelocity(velocity) {
